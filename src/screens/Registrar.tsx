@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import { RadioButton } from 'react-native-paper'; // Instale a biblioteca se necessário
-import { useNavigation } from '@react-navigation/native';
+import { RadioButton } from 'react-native-paper'; 
+import { useNavigation, RouteProp } from '@react-navigation/native';
+import { RootStackParamList } from '../type';
 
-export default function PhotoReviewScreen({ route }) {
-  const { photoUri } = route.params;
+type RegistrarVisitaScreenProps = {
+  route: RouteProp<RootStackParamList, 'RegistrarVisita'>;
+};
+
+export default function PhotoReviewScreen({ route }: RegistrarVisitaScreenProps) {
+  const { photoUri, location } = route.params;
   const [selectedOption, setSelectedOption] = useState('');
   const navigation = useNavigation();
 
   const submitData = () => {
-    // Aqui você pode enviar a foto e a seleção para o banco de dados
     console.log('Foto:', photoUri);
+    console.log('Localização:', location);
     console.log('Selecionado:', selectedOption);
 
-    // Voltar para a tela de captura de foto
     navigation.goBack();
   };
 
@@ -21,6 +25,7 @@ export default function PhotoReviewScreen({ route }) {
     <View style={styles.container}>
       <Image source={{ uri: photoUri }} style={styles.image} />
       <Text style={styles.title}>A que local sua visita está atribuida?</Text>
+      <Text>Localização: Latitude {location.latitude}, Longitude {location.longitude}</Text>
       <View>
         {['teatro', 'feira', 'cinema', 'museu', 'biblioteca'].map((option) => (
           <View key={option} style={styles.radioContainer}>

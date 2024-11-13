@@ -1,14 +1,16 @@
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import { CameraType, useCameraPermissions } from 'expo-camera';
+import * as Location from 'expo-location';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
+import { FotoScreenNavigationProp } from '../type'; // importe os tipos de navegação
 
 export default function FotoScreen() {
   const [facing, setFacing] = useState<CameraType>('front');
   const [permission, requestPermission] = useCameraPermissions();
   const [photoUri, setPhotoUri] = useState<string | null>(null);
-  const navigation = useNavigation();
+  const navigation = useNavigation<FotoScreenNavigationProp>(); // Aplicando o tipo de navegação
 
   if (!permission) {
     return <View />;
@@ -34,8 +36,22 @@ export default function FotoScreen() {
     const result = await ImagePicker.launchCameraAsync(options);
 
     if (!result.canceled) {
+      const locationPermission = await Location.requestForegroundPermissionsAsync();
+
+      if (!locationPermission.granted) {
+        alert("É necessário conceder permissão para acessar a localização");
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      const latitude = location.coords.latitude;
+      const longitude = location.coords.longitude;
+
       setPhotoUri(result.assets[0].uri);
-      navigation.navigate('RegistrarVisita', { photoUri: result.assets[0].uri });
+      navigation.navigate('RegistrarVisita', { 
+        photoUri: result.assets[0].uri,
+        location: { latitude, longitude },
+      });
     }
   };
 
@@ -55,14 +71,10 @@ export default function FotoScreen() {
               <Text style={styles.buttonText}>Abrir Câmera</Text>
             </TouchableOpacity>
           </View>
-        </>
-        
-        {/* A câmera será ativada ao pressionar o botão */}
+        </>{/* A câmera será ativada ao pressionar o botão */}
       </View>
     );
 }
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
