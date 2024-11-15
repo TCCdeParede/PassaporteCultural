@@ -2,6 +2,7 @@ import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
+  login: undefined;
   FotoScreen: undefined; // A tela FotoScreen não precisa de parâmetros de entrada
   RegistrarVisita: {
     photoUri: string;

@@ -3,12 +3,9 @@ import { View, Text, Button, Image, StyleSheet, TouchableOpacity } from 'react-n
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
-const PerfilScreen = ({ navigation }) => {
+const PerfilScreen = ({ navigation } : any) => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
-
-  // Substitua 'YOUR_UNSPLASH_ACCESS_KEY' pela sua chave de acesso do Unsplash
-  const UNSPLASH_ACCESS_KEY = 'YOUR_UNSPLASH_ACCESS_KEY';
-
+  
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {

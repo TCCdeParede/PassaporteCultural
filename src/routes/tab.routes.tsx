@@ -1,12 +1,14 @@
-import React from 'react';
+// src/routes/tab.routes.tsx
+import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Feather } from '@expo/vector-icons';
 import Foto from '../screens/Foto';
 import Perfil from '../screens/Perfil';
 import Config from '../screens/Config';
-import EditarPerfil from '../screens/EditarPerfil'; // Importando a tela EditarPerfil
-import Registrar from '../screens/Registrar'; // Importando a tela EditarPerfil
+import EditarPerfil from '../screens/EditarPerfil';
+import Registrar from '../screens/Registrar';
+import LoginScreen from '../screens/login'; // Importa a tela de login
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -74,6 +76,11 @@ function TabRoutes() {
 export default function AppRoutes() {
   return (
     <Stack.Navigator>
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}  // Tela de login será a primeira
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="TabRoutes"
         component={TabRoutes}
