@@ -13,7 +13,7 @@ export default function LoginScreen() {
     data.append('senha', password);
 
     try {
-      const response = await fetch('http://192.168.0.9/PassaporteCulturalSite-main/PassportCultural/php/loginAluno.php', {
+      const response = await fetch('http://PassaporteCulturalSite-main/PassportCultural/php/loginAluno.php', {
         method: 'POST',
         body: data,
       });
