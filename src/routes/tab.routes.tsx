@@ -9,6 +9,7 @@ import Config from '../screens/Config';
 import EditarPerfil from '../screens/EditarPerfil';
 import Registrar from '../screens/Registrar';
 import LoginScreen from '../screens/login'; // Importa a tela de login
+import CadastroAlunoScreen from '../screens/cadastro';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -79,6 +80,11 @@ export default function AppRoutes() {
       <Stack.Screen
         name="Login"
         component={LoginScreen}  // Tela de login será a primeira
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Cadastro"
+        component={CadastroAlunoScreen}  // Tela de login será a primeira
         options={{ headerShown: false }}
       />
       <Stack.Screen

@@ -48,7 +48,7 @@ export default function LoginScreen() {
         value={password}
         onChangeText={setPassword}
       />
-      <TouchableOpacity style={styles.CadText}>
+      <TouchableOpacity style={styles.CadText} onPress={() => navigation.navigate('Cadastro')}>
         <Text>Primeira vez? Clique aqui para se cadastrar</Text>
       </TouchableOpacity>
       <Button title="Entrar" onPress={handleLogin} color={'#402E7A'} />
