@@ -1,20 +1,36 @@
-// src/screens/LoginScreen.tsx
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
-import { RootStackParamList } from '../type'; // Importe o tipo de navegação raiz
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-
 export default function LoginScreen() {
-    const [email, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>(); // Tipo de navegação para o Stack
-  
-    async function handleLogin(){
-        //navigation.navigate('TabRoutes');
-    };
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigation = useNavigation();
 
+  async function handleLogin() {
+    const data = new FormData();
+    data.append('email', email);
+    data.append('senha', password);
+
+    try {
+      const response = await fetch('http://192.168.0.9/PassaporteCulturalSite-main/PassportCultural/php/loginAluno.php', {
+        method: 'POST',
+        body: data,
+      });
+      const responseData = await response.json();
+      
+      if (responseData.status === 'success') {
+        // Redirecionar para a tela principal
+        navigation.navigate('TabRoutes');
+      } else {
+        // Mostrar erro
+        Alert.alert('Erro', responseData.message);
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Erro', 'Erro ao tentar conectar com o servidor');
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -23,7 +39,7 @@ export default function LoginScreen() {
         style={styles.input}
         placeholder="Usuário"
         value={email}
-        onChangeText={setUsername}
+        onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
@@ -35,7 +51,7 @@ export default function LoginScreen() {
       <TouchableOpacity style={styles.CadText}>
         <Text>Primeira vez? Clique aqui para se cadastrar</Text>
       </TouchableOpacity>
-      <Button title="Entrar" onPress={handleLogin} color={'#402E7A'}/>
+      <Button title="Entrar" onPress={handleLogin} color={'#402E7A'} />
     </View>
   );
 }
