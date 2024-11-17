@@ -1,15 +1,13 @@
-import { CameraType, useCameraPermissions } from 'expo-camera';
+import { useCameraPermissions } from 'expo-camera';
 import * as Location from 'expo-location';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
-import { FotoScreenNavigationProp } from '../type'; // importe os tipos de navegação
+import { FotoScreenNavigationProp } from '../type'; // Importe os tipos de navegação
 
 export default function FotoScreen() {
-  const [facing, setFacing] = useState<CameraType>('front');
   const [permission, requestPermission] = useCameraPermissions();
-  const [photoUri, setPhotoUri] = useState<string | null>(null);
   const navigation = useNavigation<FotoScreenNavigationProp>(); // Aplicando o tipo de navegação
 
   if (!permission) {
@@ -20,7 +18,7 @@ export default function FotoScreen() {
     return (
       <View style={styles.container}>
         <Text style={styles.message}>É necessário conceder permissão para acessar a câmera</Text>
-        <Button onPress={requestPermission} title="Conceder Permissão"/>
+        <Button onPress={requestPermission} title="Conceder Permissão" />
       </View>
     );
   }
@@ -39,7 +37,7 @@ export default function FotoScreen() {
       const locationPermission = await Location.requestForegroundPermissionsAsync();
 
       if (!locationPermission.granted) {
-        alert("É necessário conceder permissão para acessar a localização");
+        alert('É necessário conceder permissão para acessar a localização');
         return;
       }
 
@@ -47,34 +45,33 @@ export default function FotoScreen() {
       const latitude = location.coords.latitude;
       const longitude = location.coords.longitude;
 
-      setPhotoUri(result.assets[0].uri);
-      navigation.navigate('RegistrarVisita', { 
+      // Redireciona para a tela `RegistrarVisita` com os dados da foto e localização
+      navigation.navigate('RegistrarVisita', {
         photoUri: result.assets[0].uri,
         location: { latitude, longitude },
+        date: new Date().toLocaleString(), // Adicionando data e hora
       });
     }
   };
 
   return (
-      <View style={styles.container}>
-        <>
-          <Text style={styles.title}>Tirar uma foto</Text>
-          <View style={styles.reminderBox}>
-            <Text style={styles.subtitle}>Lembre-se de:</Text>
-            <Text style={styles.reminderText}>• Foto nítida</Text>
-            <Text style={styles.reminderText}>• Facilidade de localizar onde está</Text>
-            <Text style={styles.reminderText}>• Selecione corretamente o local de sua visita</Text>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={openCamera} // Chamar a função que abre a câmera
-            >
-              <Text style={styles.buttonText}>Abrir Câmera</Text>
-            </TouchableOpacity>
-          </View>
-        </>{/* A câmera será ativada ao pressionar o botão */}
-      </View>
-    );
+    <View style={styles.container}>
+      <>
+        <Text style={styles.title}>Tirar uma foto</Text>
+        <View style={styles.reminderBox}>
+          <Text style={styles.subtitle}>Lembre-se de:</Text>
+          <Text style={styles.reminderText}>• Foto nítida</Text>
+          <Text style={styles.reminderText}>• Facilidade de localizar onde está</Text>
+          <Text style={styles.reminderText}>• Selecione corretamente o local de sua visita</Text>
+          <TouchableOpacity style={styles.button} onPress={openCamera}>
+            <Text style={styles.buttonText}>Abrir Câmera</Text>
+          </TouchableOpacity>
+        </View>
+      </>
+    </View>
+  );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

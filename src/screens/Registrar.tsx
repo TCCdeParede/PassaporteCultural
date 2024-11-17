@@ -10,22 +10,32 @@ type RegistrarVisitaScreenProps = {
   route: RouteProp<RootStackParamList, 'RegistrarVisita'>;
 };
 
+// Defina o tipo da foto com location podendo ser nulo
+type Photo = {
+  uri: string;
+  location: { latitude: number; longitude: number } | null;
+  date: string;
+};
+
 export default function RegistrarVisitaScreen({ route }: RegistrarVisitaScreenProps) {
   const { photoUri, location } = route.params; // Primeira foto com localização
   const [selectedOption, setSelectedOption] = useState('');
-  const [photos, setPhotos] = useState([
+  
+  // A tipagem de photos é ajustada para permitir location como null
+  const [photos, setPhotos] = useState<Photo[]>([
     {
       uri: photoUri,
       location,  // A localização é armazenada apenas para a primeira foto
       date: new Date().toLocaleString(), // Adicionando data e hora ao registrar a foto
     },
   ]); // Inicializando com a primeira foto que já tem a localização
+  
   const navigation = useNavigation();
 
   const submitData = () => {
     console.log('Fotos:', photos);
     console.log('Selecionado:', selectedOption);
-
+    // Enviar os dados aqui (você pode fazer uma requisição para o backend, por exemplo)
     navigation.goBack();
   };
 
@@ -43,6 +53,17 @@ export default function RegistrarVisitaScreen({ route }: RegistrarVisitaScreenPr
       quality: 0.75,
     });
 
+    if (!result.canceled) {
+      // Para a segunda e terceira fotos, atribuímos 'null' para location e uma data em branco
+      const newPhoto: Photo = {
+        uri: result.assets[0].uri,
+        location: null,  // Não adiciona a localização para essas fotos
+        date: '',         // Não adiciona a data para essas fotos
+      };
+
+      setPhotos((prev) => [...prev, newPhoto]);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -55,8 +76,10 @@ export default function RegistrarVisitaScreen({ route }: RegistrarVisitaScreenPr
       {photos.map((photo, index) => (
         <View key={index} style={styles.photoContainer}>
           <Image source={{ uri: photo.uri }} style={styles.image} />
-          <Text style={styles.dateText}>Data: {photo.date}</Text>
-          {photo.location && (
+          {index === 0 && photo.date && (
+            <Text style={styles.dateText}>Data: {photo.date}</Text>
+          )}
+          {index === 0 && photo.location && (
             <Text style={styles.locationText}>
               Localização: Latitude {photo.location.latitude}, Longitude {photo.location.longitude}
             </Text>
@@ -82,7 +105,12 @@ export default function RegistrarVisitaScreen({ route }: RegistrarVisitaScreenPr
         ))}
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={submitData}>
+      {/* O botão de envio só estará habilitado quando tiver 3 fotos */}
+      <TouchableOpacity 
+        style={styles.button} 
+        onPress={submitData} 
+        disabled={photos.length < 3}
+      >
         <Text style={styles.buttonText}>Enviar</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -150,4 +178,3 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
-}
