@@ -58,44 +58,65 @@ const CadastroAlunoScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", padding: 20 }}>
+    <View style={styles.container}>
+      <Text style={styles.title}>Cadastre-se</Text>
       <TextInput
         placeholder="RM"
         value={rmalu}
         onChangeText={setRmalu}
         keyboardType="numeric"
-        style={{ borderBottomWidth: 1, marginBottom: 10 }}
+        style={styles.input}
       />
       <TextInput
         placeholder="Nome"
         value={nomealu}
         onChangeText={setNomealu}
-        style={{ borderBottomWidth: 1, marginBottom: 10 }}
+        style={styles.input}
       />
       <TextInput
         placeholder="Email"
         value={emailalu}
         onChangeText={setEmailalu}
         keyboardType="email-address"
-        style={{ borderBottomWidth: 1, marginBottom: 10 }}
+        style={styles.input}
       />
       <TextInput
         placeholder="Senha"
         value={alusenha}
         onChangeText={setAlusenha}
         secureTextEntry
-        style={{ borderBottomWidth: 1, marginBottom: 10 }}
+        style={styles.input}
       />
       <TextInput
         placeholder="Nome da Turma"
         value={nometur}
         onChangeText={setNometur}
-        style={{ borderBottomWidth: 1, marginBottom: 10 }}
+        style={styles.input}
       />
 
-      <Button title="Cadastrar" onPress={handleSubmit} />
+      <Button title="Cadastrar" onPress={handleSubmit} color={'#402E7A'} />
     </View>
   );
 };
-
+const styles = StyleSheet.create({
+  container:{ 
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20 
+  },
+  title:{
+    fontSize: 30,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  input:{
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 15,
+    paddingLeft: 10,
+    borderRadius: 5,
+  }
+})
 export default CadastroAlunoScreen;
