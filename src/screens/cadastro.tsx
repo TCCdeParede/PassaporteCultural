@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Text, Alert } from "react-native";
+import { StyleSheet, View, TextInput, Button, Text, Alert } from "react-native";
 import axios from "axios";
 
 const CadastroAlunoScreen = () => {
@@ -29,7 +29,7 @@ const CadastroAlunoScreen = () => {
     try {
       // Enviar os dados para o backend
       const response = await axios.post(
-        "http://192.168.1.103/PassaporteCulturalSite/php/cadAluno.php",
+        "http://PassaporteCulturalSite/php/cadAluno.php",
         new URLSearchParams({
           rmalu,
           nomealu,
