@@ -9,11 +9,13 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useUser } from "../UserContext"; // Importe o contexto
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+  const { setUser } = useUser(); // Acesse o contexto para salvar os dados do usuário
 
   async function handleLogin() {
     const data = new FormData();
@@ -22,7 +24,7 @@ export default function LoginScreen() {
 
     try {
       const response = await fetch(
-        "http://192.168.0.9/PassaporteCulturalSite/php/loginAluno.php",
+        "http://192.168.18.5/PassaporteCulturalSite/php/loginAluno.php",
         {
           method: "POST",
           body: data,
@@ -31,10 +33,17 @@ export default function LoginScreen() {
       const responseData = await response.json();
 
       if (responseData.status === "success") {
+        // Salvar os dados do aluno no contexto
+        setUser({
+          name: responseData.nome,
+          turma: responseData.turma,
+          pontos: responseData.pontos,
+          rm: responseData.rm,
+        });
+
         // Redirecionar para a tela principal
         navigation.navigate("TabRoutes");
       } else {
-        // Mostrar erro
         Alert.alert("Erro", responseData.message);
       }
     } catch (error) {

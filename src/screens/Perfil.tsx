@@ -1,46 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
+import React from "react";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { useUser } from "../UserContext";
 
-const PerfilScreen = ({ navigation } : any) => {
-  const [profileImage, setProfileImage] = useState<string | null>(null);
-  
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const response = await axios.get('https://picsum.photos/100');
-        setProfileImage(response.request.responseURL); // Obtem a URL da imagem
-      } catch (error) {
-        console.error('Erro ao buscar imagem de perfil:', error);
-      }
-    };
-    fetchProfileImage();
-  }, []);
+const PerfilScreen = ({ navigation }: any) => {
+  const { user } = useUser();
 
   return (
     <View style={styles.container}>
-      {profileImage ? (
-        <Image source={{ uri: profileImage }} style={styles.profileImage} />
+      {user ? (
+        <>
+          <Image
+            source={require("../../assets/DefaultUserIcon.png")}
+            style={styles.profileImage}
+          />
+          <View style={styles.info}>
+            <Text style={styles.name}>{user.name}</Text>
+            <Text style={styles.turma}>Turma: {user.turma}</Text>
+            <Text style={styles.pontos}>Pontos: {user.pontos}</Text>
+          </View>
+        </>
       ) : (
-        <Image source={require('../../assets/DefaultUserIcon.png')} style={styles.profileImage} />
+        <Text>Carregando...</Text>
       )}
-      <View style={styles.info}>
-        <Text style={styles.name}>Nome do Aluno</Text>
-        <Text style={styles.turma}>Turma: 3°DSB</Text>
-        <Text style={styles.pontos}>Pontos: 150</Text>
-      </View>
 
       <TouchableOpacity
         style={styles.EditarButton}
-        onPress={() => navigation.navigate('EditarPerfil')}
+        onPress={() => navigation.navigate("EditarPerfil")}
       >
         <Text style={styles.EditarButtonText}>Editar Perfil</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.SairButton}
-        onPress={() => navigation.navigate('Login')}
+        onPress={() => navigation.navigate("Login")}
       >
         <Text style={styles.SairButtonText}>Sair</Text>
       </TouchableOpacity>
@@ -51,8 +43,8 @@ const PerfilScreen = ({ navigation } : any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
   },
   profileImage: {
@@ -63,63 +55,49 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   turma: {
     fontSize: 25,
-    color: '#555',
+    color: "#555",
     marginTop: 10,
   },
   pontos: {
     fontSize: 25,
-    color: '#555',
+    color: "#555",
     marginBottom: 20,
     marginTop: 10,
   },
   info: {
-    backgroundColor: '#E6E8EA',
+    backgroundColor: "#E6E8EA",
     width: 350,
     height: 250,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 25,
     marginTop: 10,
   },
   EditarButton: {
-    backgroundColor: '#402E7A',
+    backgroundColor: "#402E7A",
     paddingVertical: 15,
     paddingHorizontal: 35,
     borderRadius: 10,
     marginTop: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   EditarButtonText: {
-    color: '#FFF',
-    textAlign: 'center',
-    height: 20,
-    width: 100,
+    color: "#FFF",
+    textAlign: "center",
   },
   SairButton: {
-    backgroundColor: '#9B111E',
+    backgroundColor: "#9B111E",
     paddingVertical: 15,
     paddingHorizontal: 35,
     borderRadius: 10,
     marginTop: 25,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   SairButtonText: {
-    color: '#FFF',
-    textAlign: 'center',
-    height: 20,
-    width: 100,
+    color: "#FFF",
+    textAlign: "center",
   },
 });
 

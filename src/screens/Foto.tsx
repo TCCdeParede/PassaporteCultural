@@ -1,10 +1,10 @@
-import { useCameraPermissions } from 'expo-camera';
-import * as Location from 'expo-location';
-import { useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import { useNavigation } from '@react-navigation/native';
-import { FotoScreenNavigationProp } from '../type'; // Importe os tipos de navegação
+import { useCameraPermissions } from "expo-camera";
+import * as Location from "expo-location";
+import { useState } from "react";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { useNavigation } from "@react-navigation/native";
+import { FotoScreenNavigationProp } from "../type"; // Importe os tipos de navegação
 
 export default function FotoScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -17,7 +17,9 @@ export default function FotoScreen() {
   if (!permission.granted) {
     return (
       <View style={styles.container}>
-        <Text style={styles.message}>É necessário conceder permissão para acessar a câmera</Text>
+        <Text style={styles.message}>
+          É necessário conceder permissão para acessar a câmera
+        </Text>
         <Button onPress={requestPermission} title="Conceder Permissão" />
       </View>
     );
@@ -34,10 +36,11 @@ export default function FotoScreen() {
     const result = await ImagePicker.launchCameraAsync(options);
 
     if (!result.canceled) {
-      const locationPermission = await Location.requestForegroundPermissionsAsync();
+      const locationPermission =
+        await Location.requestForegroundPermissionsAsync();
 
       if (!locationPermission.granted) {
-        alert('É necessário conceder permissão para acessar a localização');
+        alert("É necessário conceder permissão para acessar a localização");
         return;
       }
 
@@ -46,7 +49,7 @@ export default function FotoScreen() {
       const longitude = location.coords.longitude;
 
       // Redireciona para a tela `RegistrarVisita` com os dados da foto e localização
-      navigation.navigate('RegistrarVisita', {
+      navigation.navigate("RegistrarVisita", {
         photoUri: result.assets[0].uri,
         location: { latitude, longitude },
         date: new Date().toLocaleString(), // Adicionando data e hora
@@ -61,8 +64,12 @@ export default function FotoScreen() {
         <View style={styles.reminderBox}>
           <Text style={styles.subtitle}>Lembre-se de:</Text>
           <Text style={styles.reminderText}>• Foto nítida</Text>
-          <Text style={styles.reminderText}>• Facilidade de localizar onde está</Text>
-          <Text style={styles.reminderText}>• Selecione corretamente o local de sua visita</Text>
+          <Text style={styles.reminderText}>
+            • Facilidade de localizar onde está
+          </Text>
+          <Text style={styles.reminderText}>
+            • Selecione corretamente o local de sua visita
+          </Text>
           <TouchableOpacity style={styles.button} onPress={openCamera}>
             <Text style={styles.buttonText}>Abrir Câmera</Text>
           </TouchableOpacity>
@@ -76,45 +83,45 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   message: {
-    textAlign: 'center',
+    textAlign: "center",
     paddingBottom: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   title: {
     fontSize: 35,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   reminderBox: {
-    backgroundColor: '#E6E8EA',
+    backgroundColor: "#E6E8EA",
     borderRadius: 10,
     padding: 20,
     marginBottom: 30,
   },
   subtitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   reminderText: {
     fontSize: 16,
     marginBottom: 5,
-    color: '#555',
+    color: "#555",
   },
   button: {
-    backgroundColor: '#402E7A',
+    backgroundColor: "#402E7A",
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 30,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
   },
 });

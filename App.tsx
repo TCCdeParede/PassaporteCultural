@@ -1,7 +1,12 @@
-import Routes from './src/routes';
-//App.tsx é o arquivo de entrada, quando o aplicativo é executado, passa por aqui
+import React from 'react';
+import { UserProvider } from './src/UserContext'; // Importa o contexto do usuário
+import Routes from './src/routes'; // Importa suas rotas
+
 export default function App() {
   return (
-    <Routes/>
+    // Envolvemos as rotas com o UserProvider
+    <UserProvider>
+      <Routes />
+    </UserProvider>
   );
 }
