@@ -11,6 +11,8 @@ export type RootStackParamList = {
       latitude: number;
       longitude: number;
     };
+    date: string;
+    rmalu: number;
   };
 };
 

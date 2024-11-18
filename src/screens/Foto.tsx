@@ -1,14 +1,15 @@
 import { useCameraPermissions } from "expo-camera";
 import * as Location from "expo-location";
-import { useState } from "react";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
-import { FotoScreenNavigationProp } from "../type"; // Importe os tipos de navegação
+import { FotoScreenNavigationProp } from "../type";
+import { useUser } from "../UserContext"; // Importando o contexto do usuário
 
 export default function FotoScreen() {
   const [permission, requestPermission] = useCameraPermissions();
-  const navigation = useNavigation<FotoScreenNavigationProp>(); // Aplicando o tipo de navegação
+  const navigation = useNavigation<FotoScreenNavigationProp>();
+  const { user } = useUser(); // Obtendo o usuário logado do contexto
 
   if (!permission) {
     return <View />;
@@ -48,33 +49,38 @@ export default function FotoScreen() {
       const latitude = location.coords.latitude;
       const longitude = location.coords.longitude;
 
-      // Redireciona para a tela `RegistrarVisita` com os dados da foto e localização
-      navigation.navigate("RegistrarVisita", {
-        photoUri: result.assets[0].uri,
-        location: { latitude, longitude },
-        date: new Date().toLocaleString(), // Adicionando data e hora
-      });
+      if (user) {
+        // Redireciona para a tela `RegistrarVisita` com os dados da foto e localização
+        navigation.navigate("RegistrarVisita", {
+          photoUri: result.assets[0].uri,
+          location: { latitude, longitude },
+          date: new Date().toISOString(), // Formato padrão para manipulação posterior
+          rmalu: user.rm, // Incluímos o RM do aluno logado
+        });        
+        
+      } else {
+        alert("Usuário não autenticado. Faça login novamente.");
+        navigation.navigate("Login");
+      }
     }
   };
 
   return (
     <View style={styles.container}>
-      <>
-        <Text style={styles.title}>Tirar uma foto</Text>
-        <View style={styles.reminderBox}>
-          <Text style={styles.subtitle}>Lembre-se de:</Text>
-          <Text style={styles.reminderText}>• Foto nítida</Text>
-          <Text style={styles.reminderText}>
-            • Facilidade de localizar onde está
-          </Text>
-          <Text style={styles.reminderText}>
-            • Selecione corretamente o local de sua visita
-          </Text>
-          <TouchableOpacity style={styles.button} onPress={openCamera}>
-            <Text style={styles.buttonText}>Abrir Câmera</Text>
-          </TouchableOpacity>
-        </View>
-      </>
+      <Text style={styles.title}>Tirar uma foto</Text>
+      <View style={styles.reminderBox}>
+        <Text style={styles.subtitle}>Lembre-se de:</Text>
+        <Text style={styles.reminderText}>• Foto nítida</Text>
+        <Text style={styles.reminderText}>
+          • Facilidade de localizar onde está
+        </Text>
+        <Text style={styles.reminderText}>
+          • Selecione corretamente o local de sua visita
+        </Text>
+        <TouchableOpacity style={styles.button} onPress={openCamera}>
+          <Text style={styles.buttonText}>Abrir Câmera</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
