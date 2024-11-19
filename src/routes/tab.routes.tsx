@@ -19,13 +19,12 @@ function TabRoutes() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#402E7A',
-        tabBarInactiveTintColor: '#808080',
+        tabBarActiveTintColor: '#ffff',
+        tabBarInactiveTintColor: '#3a6d8c',
         tabBarStyle: {
           position: 'absolute',
-          height: 60,
-          backgroundColor: '#E6E8EA',
-          marginBottom: 5,
+          height: 70,
+          backgroundColor: '#001f3f',
           shadowColor: '#000',
           shadowOpacity: 0.1,
           shadowOffset: { width: 0, height: 10 },
@@ -99,7 +98,7 @@ export default function AppRoutes() {
           title: 'Editar Perfil',
           headerShown: true,
           headerStyle: {
-            backgroundColor: '#402E7A',
+            backgroundColor: '#001f3f',
           },
           headerTintColor: '#FFF',
         }}
