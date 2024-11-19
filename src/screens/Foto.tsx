@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#ead8b1"
   },
   message: {
     textAlign: "center",
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     marginBottom: 30,
+    color: "#001f3f"
   },
   subtitle: {
     fontSize: 18,
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   button: {
-    backgroundColor: "#402E7A",
+    backgroundColor: "#001f3f",
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
