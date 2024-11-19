@@ -24,37 +24,31 @@ export default function LoginScreen() {
 
     try {
       const response = await fetch(
-        "http://192.168.1.101/PassaporteCulturalSite/php/loginAluno.php",
+        "http://192.168.0.9/PassaporteCulturalSite/php/loginAluno.php",
         {
           method: "POST",
           body: data,
         }
       );
+      const responseData = await response.json();
 
-      const text = await response.text(); // Obter como texto primeiro
-      try {
-        const responseData = JSON.parse(text); // Tentar converter para JSON
+      if (responseData.status === "success") {
+        // Salvar os dados do aluno no contexto
+        setUser({
+          name: responseData.nome,
+          turma: responseData.turma,
+          pontos: responseData.pontos,
+          rm: responseData.rm,
+        });
 
-        if (responseData.status === "success") {
-          setUser({
-            name: responseData.nome,
-            turma: responseData.turma,
-            pontos: responseData.pontos,
-            rm: responseData.rm, // Garantir que o rm está sendo setado corretamente
-          });
-
-          // Redirecionar para a tela principal
-          navigation.navigate("TabRoutes");
-        } else {
-          Alert.alert("Erro", responseData.message);
-        }
-      } catch (error) {
-        console.error("Erro ao processar JSON:", text); // Logar a resposta para debug
-        Alert.alert("Erro", "Resposta inesperada do servidor.");
+        // Redirecionar para a tela principal
+        navigation.navigate("TabRoutes");
+      } else {
+        Alert.alert("Erro", responseData.message);
       }
     } catch (error) {
-      console.error("Erro de conexão:", error);
-      Alert.alert("Erro", "Erro ao tentar conectar com o servidor.");
+      console.error(error);
+      Alert.alert("Erro", "Erro ao tentar conectar com o servidor");
     }
   }
 
@@ -80,7 +74,7 @@ export default function LoginScreen() {
       >
         <Text>Primeira vez? Clique aqui para se cadastrar</Text>
       </TouchableOpacity>
-      <Button title="Entrar" onPress={handleLogin} color={"#402E7A"} />
+      <Button title="Entrar" onPress={handleLogin} color={"#001f3f"} />
     </View>
   );
 }
@@ -90,7 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#ead8b1",
   },
   title: {
     fontSize: 30,
@@ -100,11 +94,12 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    borderColor: "#ccc",
+    borderColor: "#000",
     borderWidth: 1,
     marginBottom: 15,
     paddingLeft: 10,
     borderRadius: 5,
+    backgroundColor: "rgb(152, 195, 209)"
   },
   CadText: {
     justifyContent: "center",
