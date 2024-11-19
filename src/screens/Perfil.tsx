@@ -46,30 +46,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
+    backgroundColor: "#ead8b1"
   },
   profileImage: {
-    width: 250,
-    height: 250,
+    width: 210,
+    height: 210,
     borderRadius: 150,
     marginBottom: 20,
+    
   },
   name: {
     fontSize: 30,
     fontWeight: "bold",
+    color: "#ffff"
   },
   turma: {
     fontSize: 25,
-    color: "#555",
+    color: "rgb(196, 221, 230);",
     marginTop: 10,
   },
   pontos: {
     fontSize: 25,
-    color: "#555",
+    color: "rgb(196, 221, 230);",
     marginBottom: 20,
     marginTop: 10,
   },
   info: {
-    backgroundColor: "#E6E8EA",
+    backgroundColor: "#001f3f",
     width: 350,
     height: 250,
     alignItems: "center",
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   EditarButton: {
-    backgroundColor: "#402E7A",
+    backgroundColor: "#001f3f",
     paddingVertical: 15,
     paddingHorizontal: 35,
     borderRadius: 10,
