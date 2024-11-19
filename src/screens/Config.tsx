@@ -15,6 +15,7 @@ const SettingsScreen = () => {
           <View style={styles.radioButtonContainer}>
             <RadioButton
               value="system"
+              color='#001f3f'
               status={theme === 'system' ? 'checked' : 'unchecked'}
               onPress={() => setTheme('system')}
             />
@@ -23,6 +24,7 @@ const SettingsScreen = () => {
           <View style={styles.radioButtonContainer}>
             <RadioButton
               value="light"
+              color='#001f3f'
               status={theme === 'light' ? 'checked' : 'unchecked'}
               onPress={() => setTheme('light')}
             />
@@ -31,6 +33,7 @@ const SettingsScreen = () => {
           <View style={styles.radioButtonContainer}>
             <RadioButton
               value="dark"
+              color='#001f3f'
               status={theme === 'dark' ? 'checked' : 'unchecked'}
               onPress={() => setTheme('dark')}
             />
@@ -59,6 +62,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: "#ead8b1"
   },
   section: {
     marginVertical: 20,
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
   },
   radioButtonGroup: {
     flexDirection: 'column',
-    backgroundColor: '#E6E8EA',
+    backgroundColor: '#6a9ab0',
     borderRadius: 10,
   },
   radioButtonContainer: {
@@ -82,9 +86,13 @@ const styles = StyleSheet.create({
   radioText: {
     marginLeft: 12,
     fontSize: 18,
+    color: "#ffff"
+  },
+  radiobutton:{
+
   },
   linkText: {
-    color: 'blue',
+    color: '#001f3f',
     fontSize: 18,
   },
 });
