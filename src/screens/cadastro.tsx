@@ -29,7 +29,7 @@ const CadastroAlunoScreen = () => {
     try {
       // Enviar os dados para o backend
       const response = await axios.post(
-        "http://192.168.1.101/PassaporteCulturalSite/php/cadAluno.php",
+        "http://192.168.0.9/PassaporteCulturalSite/php/cadAluno.php",
         new URLSearchParams({
           rmalu,
           nomealu,
@@ -94,7 +94,7 @@ const CadastroAlunoScreen = () => {
         style={styles.input}
       />
 
-      <Button title="Cadastrar" onPress={handleSubmit} color={'#402E7A'} />
+      <Button title="Cadastrar" onPress={handleSubmit} color={'#001f3f'} />
     </View>
   );
 };
@@ -102,7 +102,8 @@ const styles = StyleSheet.create({
   container:{ 
     flex: 1,
     justifyContent: 'center',
-    padding: 20 
+    padding: 20,
+    backgroundColor: '#ead8b1'
   },
   title:{
     fontSize: 30,
@@ -112,11 +113,12 @@ const styles = StyleSheet.create({
   },
   input:{
     height: 50,
-    borderColor: '#ccc',
+    borderColor: '#000',
     borderWidth: 1,
-    marginBottom: 15,
+    marginBottom: 20,
     paddingLeft: 10,
     borderRadius: 5,
+    backgroundColor: 'rgb(152, 195, 209)'
   }
 })
 export default CadastroAlunoScreen;
