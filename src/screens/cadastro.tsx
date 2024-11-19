@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View, TextInput, Button, Text, Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 const CadastroAlunoScreen = () => {
@@ -10,6 +11,7 @@ const CadastroAlunoScreen = () => {
   const [pontmes, setPontmes] = useState("0");
   const [pontano, setPontano] = useState("0");
   const [nometur, setNometur] = useState("");
+  const navigation = useNavigation();
 
   const handleSubmit = async () => {
     // Verificar se todos os campos foram preenchidos
@@ -29,7 +31,7 @@ const CadastroAlunoScreen = () => {
     try {
       // Enviar os dados para o backend
       const response = await axios.post(
-        "http://192.168.0.9/PassaporteCulturalSite/php/cadAluno.php",
+        "http://10.67.235.235/PassaporteCulturalSite/php/cadAluno.php",
         new URLSearchParams({
           rmalu,
           nomealu,
@@ -48,6 +50,8 @@ const CadastroAlunoScreen = () => {
       const data = response.data;
       if (data.message) {
         Alert.alert("Sucesso", data.message);
+        navigation.navigate("Login");
+        
       } else if (data.error) {
         Alert.alert("Erro", data.error);
       }
@@ -118,7 +122,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingLeft: 10,
     borderRadius: 5,
-    backgroundColor: 'rgb(152, 195, 209)'
+    backgroundColor: 'rgb(196, 221, 230);'
   }
 })
 export default CadastroAlunoScreen;
