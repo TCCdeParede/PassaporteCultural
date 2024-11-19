@@ -13,6 +13,7 @@ import { useNavigation, RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../type";
 import * as ImagePicker from "expo-image-picker";
 import { useUser } from "../UserContext";
+import * as FileSystem from "expo-file-system"; // Para manipulação de arquivos
 
 type RegistrarVisitaScreenProps = {
   route: RouteProp<RootStackParamList, "RegistrarVisita">;
@@ -39,6 +40,19 @@ export default function RegistrarVisitaScreen({
   const { user } = useUser();
   const navigation = useNavigation();
 
+  // Função para converter a imagem para base64
+  const convertToBase64 = async (uri: string) => {
+    try {
+      const base64 = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      return base64;
+    } catch (error) {
+      console.error("Erro ao converter a imagem para base64", error);
+      return null;
+    }
+  };
+
   // Função para enviar os dados ao backend
   const submitData = async () => {
     if (!user) {
@@ -47,21 +61,28 @@ export default function RegistrarVisitaScreen({
       return;
     }
 
-    const firstPhoto = photos[0];
+    // Converter todas as imagens para base64
+    const photosBase64 = await Promise.all(
+      photos.map(async (photo) => ({
+        uri: await convertToBase64(photo.uri), // Converte a imagem para base64
+        location: photo.location,
+        date: photo.date,
+      }))
+    );
+
     const data = {
       userId: user.rm, // Pegando o RM do usuário logado
       local: selectedOption,
-      photos: photos.map((photo) => ({
-        uri: photo.uri,
-        location: photo.location,
-        date: photo.date,
-      })),
+      photos: photosBase64, // Passando as imagens codificadas em base64
       pontfoto: 0,
       rev: false,
       rmprof: 22513, // ID fixo do professor
     };
 
-    console.log("Dados enviados para o backend:", JSON.stringify(data, null, 2));
+    console.log(
+      "Dados enviados para o backend:",
+      JSON.stringify(data, null, 2)
+    );
 
     try {
       const response = await fetch(
@@ -76,6 +97,8 @@ export default function RegistrarVisitaScreen({
       );
 
       const text = await response.text();
+      console.log("Resposta do servidor:", text); // Log da resposta do servidor
+
       try {
         const result = JSON.parse(text);
         if (result.status === "success") {
