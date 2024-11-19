@@ -30,25 +30,31 @@ export default function LoginScreen() {
           body: data,
         }
       );
-      const responseData = await response.json();
 
-      if (responseData.status === "success") {
-        // Salvar os dados do aluno no contexto
-        setUser({
-          name: responseData.nome,
-          turma: responseData.turma,
-          pontos: responseData.pontos,
-          rm: responseData.rm,
-        });
+      const text = await response.text(); // Obter como texto primeiro
+      try {
+        const responseData = JSON.parse(text); // Tentar converter para JSON
 
-        // Redirecionar para a tela principal
-        navigation.navigate("TabRoutes");
-      } else {
-        Alert.alert("Erro", responseData.message);
+        if (responseData.status === "success") {
+          setUser({
+            name: responseData.nome,
+            turma: responseData.turma,
+            pontos: responseData.pontos,
+            rm: responseData.rm, // Garantir que o rm está sendo setado corretamente
+          });
+
+          // Redirecionar para a tela principal
+          navigation.navigate("TabRoutes");
+        } else {
+          Alert.alert("Erro", responseData.message);
+        }
+      } catch (error) {
+        console.error("Erro ao processar JSON:", text); // Logar a resposta para debug
+        Alert.alert("Erro", "Resposta inesperada do servidor.");
       }
     } catch (error) {
-      console.error(error);
-      Alert.alert("Erro", "Erro ao tentar conectar com o servidor");
+      console.error("Erro de conexão:", error);
+      Alert.alert("Erro", "Erro ao tentar conectar com o servidor.");
     }
   }
 
