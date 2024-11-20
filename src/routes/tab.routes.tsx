@@ -10,6 +10,7 @@ import EditarPerfil from '../screens/EditarPerfil';
 import Registrar from '../screens/Registrar';
 import LoginScreen from '../screens/login'; // Importa a tela de login
 import CadastroAlunoScreen from '../screens/cadastro';
+import Revisao from '../screens/revisao';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -54,6 +55,15 @@ function TabRoutes() {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Feather name="user" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Revisão"
+        component={Revisao}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="clipboard" color={color} size={size} />
           ),
         }}
       />

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View, TextInput, Button, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import { Picker } from '@react-native-picker/picker';
 
 const CadastroAlunoScreen = () => {
   const [rmalu, setRmalu] = useState("");
@@ -10,7 +11,7 @@ const CadastroAlunoScreen = () => {
   const [alusenha, setAlusenha] = useState("");
   const [pontmes, setPontmes] = useState("0");
   const [pontano, setPontano] = useState("0");
-  const [nometur, setNometur] = useState("");
+  const [nometur, setNometur] = useState(""); // Agora será uma string selecionada do Picker
   const navigation = useNavigation();
 
   const handleSubmit = async () => {
@@ -22,7 +23,7 @@ const CadastroAlunoScreen = () => {
       !alusenha ||
       !pontmes ||
       !pontano ||
-      !nometur
+      !nometur // Verificando se a turma foi selecionada
     ) {
       Alert.alert("Erro", "Por favor, preencha todos os campos!");
       return;
@@ -39,7 +40,7 @@ const CadastroAlunoScreen = () => {
           alusenha,
           pontmes,
           pontano,
-          nometur,
+          nometur, // Passando o valor da turma selecionada
         }),
         { headers: { "Content-Type": "application/x-www-form-urlencoded" } } // Cabeçalho para o formato correto
       );
@@ -51,7 +52,6 @@ const CadastroAlunoScreen = () => {
       if (data.message) {
         Alert.alert("Sucesso", data.message);
         navigation.navigate("Login");
-        
       } else if (data.error) {
         Alert.alert("Erro", data.error);
       }
@@ -91,31 +91,46 @@ const CadastroAlunoScreen = () => {
         secureTextEntry
         style={styles.input}
       />
-      <TextInput
-        placeholder="Nome da Turma"
-        value={nometur}
-        onChangeText={setNometur}
+      
+      <Text style={styles.label}>Selecione a Turma</Text>
+      <Picker
+        selectedValue={nometur}
+        onValueChange={setNometur}
         style={styles.input}
-      />
+      >
+        <Picker.Item label="3DSA" value="3DSA" />
+        <Picker.Item label="3DSB" value="3DSB" />
+        <Picker.Item label="3EAA" value="3EAA" />
+        <Picker.Item label="3EAB" value="3EAB" />
+        <Picker.Item label="2DSA" value="2DSA" />
+        <Picker.Item label="2DSB" value="2DSB" />
+        <Picker.Item label="2EAA" value="2EAA" />
+        <Picker.Item label="2EAB" value="2EAB" />
+        <Picker.Item label="1DSA" value="1DSA" />
+        <Picker.Item label="1DSB" value="1DSB" />
+        <Picker.Item label="1EAA" value="1EAA" />
+        <Picker.Item label="1EAB" value="1EAB" />
+      </Picker>
 
-      <Button title="Cadastrar" onPress={handleSubmit} color={'#001f3f'}/>
+      <Button title="Cadastrar" onPress={handleSubmit} color={'#001f3f'} />
     </View>
   );
 };
+
 const styles = StyleSheet.create({
-  container:{ 
+  container: {
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#ead8b1'
+    backgroundColor: '#ead8b1',
   },
-  title:{
+  title: {
     fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
   },
-  input:{
+  input: {
     height: 50,
     borderColor: '#000',
     borderWidth: 1,
@@ -128,6 +143,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 10,
+    fontWeight: 'bold',
   }
-})
+});
+
 export default CadastroAlunoScreen;
