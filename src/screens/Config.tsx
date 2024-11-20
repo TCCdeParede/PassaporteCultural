@@ -12,33 +12,25 @@ const SettingsScreen = () => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Tema</Text>
         <View style={styles.radioButtonGroup}>
-          <View style={styles.radioButtonContainer}>
-            <RadioButton
-              value="system"
-              color='#001f3f'
-              status={theme === 'system' ? 'checked' : 'unchecked'}
-              onPress={() => setTheme('system')}
-            />
-            <Text style={styles.radioText}>Automático (sistema)</Text>
-          </View>
-          <View style={styles.radioButtonContainer}>
-            <RadioButton
-              value="light"
-              color='#001f3f'
-              status={theme === 'light' ? 'checked' : 'unchecked'}
-              onPress={() => setTheme('light')}
-            />
-            <Text style={styles.radioText}>Tema Claro</Text>
-          </View>
-          <View style={styles.radioButtonContainer}>
-            <RadioButton
-              value="dark"
-              color='#001f3f'
-              status={theme === 'dark' ? 'checked' : 'unchecked'}
-              onPress={() => setTheme('dark')}
-            />
-            <Text style={styles.radioText}>Tema Escuro</Text>
-          </View>
+          {[
+            { value: 'system', label: 'Automático (sistema)' },
+            { value: 'light', label: 'Tema Claro' },
+            { value: 'dark', label: 'Tema Escuro' },
+          ].map((option) => (
+            <TouchableOpacity
+              key={option.value}
+              style={styles.radioButtonContainer}
+              onPress={() => setTheme(option.value)}
+            >
+              <RadioButton
+                value={option.value}
+                color="#001f3f"
+                status={theme === option.value ? 'checked' : 'unchecked'}
+                onPress={() => setTheme(option.value)}
+              />
+              <Text style={styles.radioText}>{option.label}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </View>
 
@@ -62,7 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#ead8b1"
+    backgroundColor: "#ead8b1",
   },
   section: {
     marginVertical: 20,
@@ -77,19 +69,21 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#6a9ab0',
     borderRadius: 10,
+    padding: 10,
   },
   radioButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    backgroundColor: '#6a9ab0',
     marginBottom: 10,
   },
   radioText: {
     marginLeft: 12,
     fontSize: 18,
-    color: "#ffff"
-  },
-  radiobutton:{
-
+    color: "#fff",
   },
   linkText: {
     color: '#001f3f',

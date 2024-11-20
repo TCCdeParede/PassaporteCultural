@@ -24,7 +24,7 @@ export default function LoginScreen() {
 
     try {
       const response = await fetch(
-        "http://10.67.235.235/PassaporteCulturalSite/php/loginAluno.php",
+        "http://192.168.0.9/PassaporteCulturalSite/php/loginAluno.php",
         {
           method: "POST",
           body: data,
@@ -99,7 +99,12 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingLeft: 10,
     borderRadius: 5,
-    backgroundColor: "rgb(196, 221, 230);"
+    backgroundColor: "rgb(196, 221, 230)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   CadText: {
     justifyContent: "center",

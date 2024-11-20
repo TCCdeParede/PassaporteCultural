@@ -85,7 +85,7 @@ export default function RegistrarVisitaScreen({
 
     try {
       const response = await fetch(
-        "http://192.168.1.104/PassaporteCulturalSite/php/visita.php",
+        "http://192.168.0.9/PassaporteCulturalSite/php/visita.php",
         {
           method: "POST",
           headers: {
@@ -145,26 +145,12 @@ export default function RegistrarVisitaScreen({
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>A que local sua visita está atribuída?</Text>
-
-      {photos[0].location && (
-        <Text>
-          Localização da primeira foto: Latitude {photos[0].location.latitude},
-          Longitude {photos[0].location.longitude}
-        </Text>
-      )}
-
+      <Text style={styles.title}>Fotos</Text>
       {photos.map((photo, index) => (
         <View key={index} style={styles.photoContainer}>
           <Image source={{ uri: photo.uri }} style={styles.image} />
           {index === 0 && photo.date && (
             <Text style={styles.dateText}>Data: {photo.date}</Text>
-          )}
-          {index === 0 && photo.location && (
-            <Text style={styles.locationText}>
-              Localização: Latitude {photo.location.latitude}, Longitude{" "}
-              {photo.location.longitude}
-            </Text>
           )}
         </View>
       ))}
@@ -172,13 +158,15 @@ export default function RegistrarVisitaScreen({
       <TouchableOpacity style={styles.addButton} onPress={addPhoto}>
         <Text style={styles.addButtonText}>Adicionar Foto</Text>
       </TouchableOpacity>
-
-      <View>
-        {["teatro", "feira", "cinema", "museu", "biblioteca"].map((option) => (
-          <View key={option} style={styles.radioContainer}>
+      <Text style={styles.title}>A que local sua visita está atribuída?</Text>
+      <View style={styles.radioContainer}>
+        {["Show", "Teatro", "Feira", "Centro Histórico","Museu", 
+        "Visita Técnica", "Exposição", "Cinema", "Biblioteca", "Evento Esportivo"].map((option) => (
+          <View key={option} style={styles.radioButton}>
             <RadioButton
               value={option}
               status={selectedOption === option ? "checked" : "unchecked"}
+              color="#001f3f"
               onPress={() => setSelectedOption(option)}
             />
             <Text>{option}</Text>
@@ -205,11 +193,13 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
     flexGrow: 1,
+    backgroundColor: '#ead8b1'
   },
   title: {
-    fontSize: 20,
+    fontSize: 25,
     marginBottom: 10,
     textAlign: "center",
+    fontWeight: "bold",
   },
   photoContainer: {
     alignItems: "center",
@@ -220,43 +210,72 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 10,
     marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   dateText: {
     fontSize: 14,
-    color: "#555",
+    color: "#111",
   },
   locationText: {
     fontSize: 14,
-    color: "#555",
+    color: "#111",
   },
   radioContainer: {
+    backgroundColor: "rgb(196, 221, 230)",
+    padding: 10,
+    width: 350,
+    height: 250,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    flexDirection: "row",
+    flexWrap: "wrap", 
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  radioButton: {
+    width: "45%",
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 5,
-    backgroundColor: "#E6E8EA",
-    padding: 10,
-    borderRadius: 15,
+    marginBottom: 10,
   },
   addButton: {
-    backgroundColor: "#402E7A",
+    backgroundColor: "#001f3f",
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
     marginVertical: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   addButtonText: {
     color: "#fff",
     fontSize: 16,
   },
   button: {
-    backgroundColor: "#402E7A",
+    backgroundColor: "#001f3f",
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
     marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   buttonDisabled: {
-    backgroundColor: "#A9A9A9",
+    backgroundColor: "rgb(196, 221, 230)",
   },
   buttonText: {
     color: "#fff",

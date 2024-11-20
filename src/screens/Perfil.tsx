@@ -46,19 +46,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#ead8b1"
+    backgroundColor: "#ead8b1",
   },
   profileImage: {
     width: 210,
     height: 210,
     borderRadius: 150,
     marginBottom: 20,
-    
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   name: {
     fontSize: 30,
     fontWeight: "bold",
-    color: "#ffff"
+    color: "#fff",
   },
   turma: {
     fontSize: 25,
@@ -73,12 +77,17 @@ const styles = StyleSheet.create({
   },
   info: {
     backgroundColor: "#001f3f",
-    width: 350,
-    height: 250,
+    width: 300,
+    height: 200,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 25,
     marginTop: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   EditarButton: {
     backgroundColor: "#001f3f",
@@ -86,6 +95,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 35,
     borderRadius: 10,
     marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   EditarButtonText: {
     color: "#FFF",
@@ -97,6 +111,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 35,
     borderRadius: 10,
     marginTop: 25,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   SairButtonText: {
     color: "#FFF",

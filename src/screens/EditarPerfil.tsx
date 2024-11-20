@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#ead8b1'
   },
   imageContainer: {
     position: 'relative',
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     bottom: 0,
-    backgroundColor: '#402E7A',
+    backgroundColor: '#001f3f',
     padding: 10,
     borderRadius: 20,
   },
@@ -113,9 +114,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: '100%',
     borderRadius: 50,
+    backgroundColor: 'rgb(196, 221, 230);'
   },
   saveButton: {
-    backgroundColor: '#402E7A',
+    backgroundColor: '#001f3f',
     paddingVertical: 15,
     paddingHorizontal: 35,
     borderRadius: 10,

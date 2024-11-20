@@ -67,16 +67,15 @@ export default function FotoScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tirar uma foto</Text>
+      <Text style={styles.title}>Adicionar Visita</Text>
       <View style={styles.reminderBox}>
         <Text style={styles.subtitle}>Lembre-se de:</Text>
         <Text style={styles.reminderText}>• Foto nítida</Text>
-        <Text style={styles.reminderText}>
-          • Facilidade de localizar onde está
-        </Text>
-        <Text style={styles.reminderText}>
-          • Selecione corretamente o local de sua visita
-        </Text>
+        <Text style={styles.reminderText}>• Facilidade de localizar onde está</Text>
+        <Text style={styles.reminderText}>• Selfie sua</Text>
+        <Text style={styles.reminderText}>• foto dentro da exposição</Text>
+        <Text style={styles.reminderText}>• foto dentro de um item da exposição</Text>
+        <Text style={styles.reminderText}>• Selecione corretamente o local de sua visita</Text>
         <TouchableOpacity style={styles.button} onPress={openCamera}>
           <Text style={styles.buttonText}>Abrir Câmera</Text>
         </TouchableOpacity>
@@ -103,13 +102,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
+    
   },
   reminderBox: {
-    backgroundColor: "#E6E8EA",
+    backgroundColor: "rgb(196, 221, 230)",
     borderRadius: 10,
     padding: 20,
     marginBottom: 30,
-    color: "#001f3f"
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   subtitle: {
     fontSize: 18,
@@ -119,7 +123,8 @@ const styles = StyleSheet.create({
   reminderText: {
     fontSize: 16,
     marginBottom: 5,
-    color: "#555",
+    color: "#111",
+    
   },
   button: {
     backgroundColor: "#001f3f",

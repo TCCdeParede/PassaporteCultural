@@ -25,9 +25,6 @@ function TabRoutes() {
           position: 'absolute',
           height: 70,
           backgroundColor: '#001f3f',
-          shadowColor: '#000',
-          shadowOpacity: 0.1,
-          shadowOffset: { width: 0, height: 10 },
           shadowRadius: 10,
           elevation: 5,
           alignItems: 'center',
@@ -110,7 +107,7 @@ export default function AppRoutes() {
           title: 'Registrar Visita',
           headerShown: true,
           headerStyle: {
-            backgroundColor: '#402E7A',
+            backgroundColor: '#001f3f',
           },
           headerTintColor: '#FFF',
         }}
