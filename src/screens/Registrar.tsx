@@ -74,7 +74,6 @@ export default function RegistrarVisitaScreen({
       userId: user.rm, // Pegando o RM do usuário logado
       local: selectedOption,
       photos: photosBase64, // Passando as imagens codificadas em base64
-      pontfoto: 0,
       rev: false,
       rmprof: 22513, // ID fixo do professor
     };
@@ -86,7 +85,7 @@ export default function RegistrarVisitaScreen({
 
     try {
       const response = await fetch(
-        "http://192.168.1.101/PassaporteCulturalSite/php/visita.php",
+        "http://192.168.1.104/PassaporteCulturalSite/php/visita.php",
         {
           method: "POST",
           headers: {
