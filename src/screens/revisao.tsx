@@ -1,88 +1,85 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import { View, Text, FlatList, Alert, StyleSheet } from "react-native";
+import { useUser } from "../UserContext"; // Importando o contexto
 
 const Revisao = () => {
-    const [visitas, setVisitas] = useState([]);
+  const { user } = useUser(); // Pegando o usuário logado
+  const [visitas, setVisitas] = useState<any[]>([]); // Usando any[] para permitir qualquer formato de dado
 
-    const fetchVisitas = async () => {
-        try {
-            const response = await fetch("http://192.168.0.9/PassaporteCulturalSite/php/revisar_visitas.php");
-            const data = await response.json();
-            if (data.status === "sucesso") {
-                setVisitas(data.data);
-            } else {
-                Alert.alert("Erro", "Não foi possível carregar as visitas.");
-            }
-        } catch (error) {
-            console.error(error);
-            Alert.alert("Erro", "Erro de conexão com o servidor.");
-        }
-    };
+  const fetchVisitas = async () => {
+    if (!user) return; // Verifica se há um usuário logado
 
-    const handleUpdateStatus = async (idfoto, status) => {
-        try {
-            const response = await fetch("http://192.168.0.9/PassaporteCulturalSite/php/revisar_visitas.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ idfoto, status }),
-            });
-            const data = await response.json();
-            if (data.status === "sucesso") {
-                Alert.alert("Sucesso", data.message);
-                fetchVisitas(); // Atualiza a lista
-            } else {
-                Alert.alert("Erro", data.message);
-            }
-        } catch (error) {
-            console.error(error);
-            Alert.alert("Erro", "Erro ao atualizar o status.");
-        }
-    };
+    try {
+      const response = await fetch(
+        `http://192.168.1.104/PassaporteCulturalSite/php/revisar_visitas.php?rmalu=${user.rm}` // Passando o rmalu como parâmetro
+      );
+      const data = await response.json();
+      if (data.status === "sucesso") {
+        setVisitas(data.data);
+      } else {
+        Alert.alert("Erro", "Não foi possível carregar as visitas.");
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Erro", "Erro de conexão com o servidor.");
+    }
+  };
 
-    useEffect(() => {
-        fetchVisitas();
-    }, []);
+  useEffect(() => {
+    fetchVisitas();
+  }, [user]); // Atualiza as visitas sempre que o usuário logado mudar
 
-    const renderItem = ({ item }) => (
-        <View style={styles.itemContainer}>
-            <Text>Aluno: {item.nomealu}</Text>
-            <Text>Local: {item.local}</Text>
-            <Text>Data: {item.data} - {item.hora}</Text>
-            <View style={styles.buttons}>
-                <TouchableOpacity
-                    style={[styles.button, styles.approve]}
-                    onPress={() => handleUpdateStatus(item.idfoto, "Aprovado")}
-                >
-                    <Text style={styles.buttonText}>Aprovar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.button, styles.reject]}
-                    onPress={() => handleUpdateStatus(item.idfoto, "Reprovado")}
-                >
-                    <Text style={styles.buttonText}>Reprovar</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    );
+  // Definindo o tipo do parâmetro 'dateString' como string
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
-    return (
-        <FlatList
-            data={visitas}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.idfoto.toString()}
-        />
-    );
+  const renderItem = ({ item }: { item: any }) => (
+    <View style={styles.itemContainer}>
+      <Text>Local: {item.local}</Text>
+      <Text>Data: {formatDate(item.data)}</Text>
+
+      {/* Exibe o estado da visita */}
+      <Text style={styles.status}>Status: {item.rev}</Text>
+
+      {/* Condicional para exibir o motivo se o estado for 'Não Aceito' */}
+      {item.rev === "Não aceito" && item.motivo && (
+        <Text style={styles.motivo}>Motivo: {item.motivo}</Text>
+      )}
+
+      {/* Condicional para exibir os pontos se o estado for 'Aceito' */}
+      {item.rev === "Aceito" && item.pontos && (
+        <Text style={styles.pontos}>Pontos: {item.pontos}</Text>
+      )}
+    </View>
+  );
+
+  return (
+    <FlatList
+      data={visitas}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.idfoto.toString()}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
-    itemContainer: { padding: 15, marginVertical: 5, backgroundColor: "#f8f8f8", borderRadius: 8 },
-    buttons: { flexDirection: "row", justifyContent: "space-between", marginTop: 10 },
-    button: { padding: 10, borderRadius: 5 },
-    approve: { backgroundColor: "green" },
-    reject: { backgroundColor: "red" },
-    buttonText: { color: "#fff", fontWeight: "bold" },
+  itemContainer: {
+    padding: 15,
+    marginVertical: 5,
+    backgroundColor: "#f8f8f8",
+    borderRadius: 8,
+  },
+  status: {
+    marginTop: 10,
+    fontWeight: "bold",
+  },
+  motivo: { color: "red", marginTop: 10 },
+  pontos: { color: "green", marginTop: 10 },
 });
 
 export default Revisao;

@@ -32,7 +32,7 @@ const CadastroAlunoScreen = () => {
     try {
       // Enviar os dados para o backend
       const response = await axios.post(
-        "http://192.168.0.9/PassaporteCulturalSite/php/cadAluno.php",
+        "http://192.168.1.104/PassaporteCulturalSite/php/cadAluno.php",
         new URLSearchParams({
           rmalu,
           nomealu,
