@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, Alert, StyleSheet } from "react-native";
 import { useUser } from "../UserContext"; // Importando o contexto
+import { useFocusEffect } from "@react-navigation/native";
 
 const Revisao = () => {
   const { user } = useUser(); // Pegando o usuário logado
@@ -11,7 +12,7 @@ const Revisao = () => {
 
     try {
       const response = await fetch(
-        `http://192.168.1.104/PassaporteCulturalSite/php/revisar_visitas.php?rmalu=${user.rm}` // Passando o rmalu como parâmetro
+        `http://192.168.0.106/PassaporteCulturalSite/php/revisar_visitas.php?rmalu=${user.rm}` // Passando o rmalu como parâmetro
       );
       const data = await response.json();
       if (data.status === "sucesso") {
@@ -25,9 +26,12 @@ const Revisao = () => {
     }
   };
 
-  useEffect(() => {
-    fetchVisitas();
-  }, [user]); // Atualiza as visitas sempre que o usuário logado mudar
+  // Atualiza os dados sempre que a tela ganha foco
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchVisitas(); // Chama a função para atualizar os dados
+    }, [user])
+  );
 
   // Definindo o tipo do parâmetro 'dateString' como string
   const formatDate = (dateString: string): string => {

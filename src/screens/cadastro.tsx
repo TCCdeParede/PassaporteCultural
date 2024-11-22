@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View, TextInput, Button, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { Picker } from '@react-native-picker/picker';
+import { Picker } from "@react-native-picker/picker";
 
 const CadastroAlunoScreen = () => {
   const [rmalu, setRmalu] = useState("");
@@ -32,7 +32,7 @@ const CadastroAlunoScreen = () => {
     try {
       // Enviar os dados para o backend
       const response = await axios.post(
-        "http://192.168.1.104/PassaporteCulturalSite/php/cadAluno.php",
+        "http://192.168.0.106/PassaporteCulturalSite/php/cadAluno.php",
         new URLSearchParams({
           rmalu,
           nomealu,
@@ -91,7 +91,7 @@ const CadastroAlunoScreen = () => {
         secureTextEntry
         style={styles.input}
       />
-      
+
       <Text style={styles.label}>Selecione a Turma</Text>
       <Picker
         selectedValue={nometur}
@@ -112,7 +112,7 @@ const CadastroAlunoScreen = () => {
         <Picker.Item label="1EAB" value="1EAB" />
       </Picker>
 
-      <Button title="Cadastrar" onPress={handleSubmit} color={'#001f3f'} />
+      <Button title="Cadastrar" onPress={handleSubmit} color={"#001f3f"} />
     </View>
   );
 };
@@ -120,24 +120,24 @@ const CadastroAlunoScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 20,
-    backgroundColor: '#ead8b1',
+    backgroundColor: "#ead8b1",
   },
   title: {
     fontSize: 30,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 20,
   },
   input: {
     height: 50,
-    borderColor: '#000',
+    borderColor: "#000",
     borderWidth: 1,
     marginBottom: 20,
     paddingLeft: 10,
     borderRadius: 5,
-    backgroundColor: 'rgb(196, 221, 230)',
+    backgroundColor: "rgb(196, 221, 230)",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -147,8 +147,8 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 10,
-    fontWeight: 'bold',
-  }
+    fontWeight: "bold",
+  },
 });
 
 export default CadastroAlunoScreen;

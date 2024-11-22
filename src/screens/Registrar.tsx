@@ -85,7 +85,7 @@ export default function RegistrarVisitaScreen({
 
     try {
       const response = await fetch(
-        "http://192.168.1.104/PassaporteCulturalSite/php/visita.php",
+        "http://192.168.0.106/PassaporteCulturalSite/php/visita.php",
         {
           method: "POST",
           headers: {
@@ -102,6 +102,7 @@ export default function RegistrarVisitaScreen({
         const result = JSON.parse(text);
         if (result.status === "success") {
           Alert.alert("Sucesso", "Visita registrada com sucesso!");
+          navigation.navigate("Foto");
         } else {
           Alert.alert("Erro", result.message || "Erro ao enviar os dados.");
         }
@@ -160,8 +161,18 @@ export default function RegistrarVisitaScreen({
       </TouchableOpacity>
       <Text style={styles.title}>A que local sua visita está atribuída?</Text>
       <View style={styles.radioContainer}>
-        {["Show", "Teatro", "Feira", "Centro Histórico","Museu", 
-        "Visita Técnica", "Exposição", "Cinema", "Biblioteca", "Evento Esportivo"].map((option) => (
+        {[
+          "Show",
+          "Teatro",
+          "Feira",
+          "Centro Histórico",
+          "Museu",
+          "Visita Técnica",
+          "Exposição",
+          "Cinema",
+          "Biblioteca",
+          "Evento Esportivo",
+        ].map((option) => (
           <View key={option} style={styles.radioButton}>
             <RadioButton
               value={option}
@@ -193,7 +204,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
     flexGrow: 1,
-    backgroundColor: '#ead8b1'
+    backgroundColor: "#ead8b1",
   },
   title: {
     fontSize: 25,
@@ -236,7 +247,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     flexDirection: "row",
-    flexWrap: "wrap", 
+    flexWrap: "wrap",
     justifyContent: "space-between",
     alignItems: "center",
   },
