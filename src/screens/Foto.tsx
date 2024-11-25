@@ -21,7 +21,7 @@ export default function FotoScreen() {
         <Text style={styles.message}>
           É necessário conceder permissão para acessar a câmera
         </Text>
-        <Button onPress={requestPermission} title="Conceder Permissão" />
+        <Button onPress={requestPermission} title="Conceder Permissão" color={'#001f3f'}/>
       </View>
     );
   }

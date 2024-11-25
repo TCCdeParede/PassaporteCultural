@@ -15,45 +15,30 @@ const CadastroAlunoScreen = () => {
   const navigation = useNavigation();
 
   const handleSubmit = async () => {
-    // Verificar se todos os campos foram preenchidos
-    if (
-      !rmalu ||
-      !nomealu ||
-      !emailalu ||
-      !alusenha ||
-      !pontmes ||
-      !pontano ||
-      !nometur // Verificando se a turma foi selecionada
-    ) {
+    if (!rmalu || !nomealu || !emailalu || !alusenha || !nometur) {
       Alert.alert("Erro", "Por favor, preencha todos os campos!");
       return;
     }
-
+  
     try {
-      // Enviar os dados para o backend
       const response = await axios.post(
-        "http://192.168.0.106/PassaporteCulturalSite/php/cadAluno.php",
+        "http:///PassaporteCulturalSite/php/cadAluno.php",
         new URLSearchParams({
           rmalu,
           nomealu,
           emailalu,
           alusenha,
-          pontmes,
-          pontano,
-          nometur, // Passando o valor da turma selecionada
+          nometur,
         }),
-        { headers: { "Content-Type": "application/x-www-form-urlencoded" } } // Cabeçalho para o formato correto
+        { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
       );
-
-      console.log(response.data); // Verifique o que o backend está retornando
-
-      // Verificar a resposta do backend
+  
       const data = response.data;
       if (data.message) {
         Alert.alert("Sucesso", data.message);
         navigation.navigate("Login");
       } else if (data.error) {
-        Alert.alert("Erro", data.error);
+        Alert.alert("Falha ao cadastrar", "Email já existente ou RM já em uso"); // Mostra a mensagem de erro, incluindo "E-mail já cadastrado!"
       }
     } catch (error) {
       console.error(error);

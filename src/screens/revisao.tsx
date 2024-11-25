@@ -12,7 +12,7 @@ const Revisao = () => {
 
     try {
       const response = await fetch(
-        `http://192.168.0.106/PassaporteCulturalSite/php/revisar_visitas.php?rmalu=${user.rm}` // Passando o rmalu como parâmetro
+        `http:///PassaporteCulturalSite/php/revisar_visitas.php?rmalu=${user.rm}` // Passando o rmalu como parâmetro
       );
       const data = await response.json();
       if (data.status === "sucesso") {
@@ -33,7 +33,6 @@ const Revisao = () => {
     }, [user])
   );
 
-  // Definindo o tipo do parâmetro 'dateString' como string
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
@@ -63,20 +62,35 @@ const Revisao = () => {
   );
 
   return (
-    <FlatList
-      data={visitas}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.idfoto.toString()}
-    />
+    <View style={styles.container}>
+      <FlatList
+        data={visitas}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.idfoto.toString()}
+        contentContainerStyle={styles.listContent} // Adicionado para garantir padding na lista
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1, // Certifica-se de que ocupa a tela inteira
+    backgroundColor: "#ead8b1", // Cor de fundo
+  },
+  listContent: {
+    padding: 15, // Adicionado padding para espaçamento interno da lista
+  },
   itemContainer: {
     padding: 15,
     marginVertical: 5,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "rgb(196, 221, 230)",
     borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   status: {
     marginTop: 10,

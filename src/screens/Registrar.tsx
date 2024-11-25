@@ -85,7 +85,7 @@ export default function RegistrarVisitaScreen({
 
     try {
       const response = await fetch(
-        "http://192.168.0.106/PassaporteCulturalSite/php/visita.php",
+        "http:///PassaporteCulturalSite/php/visita.php",
         {
           method: "POST",
           headers: {
