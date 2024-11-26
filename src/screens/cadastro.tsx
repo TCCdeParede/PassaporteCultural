@@ -9,8 +9,6 @@ const CadastroAlunoScreen = () => {
   const [nomealu, setNomealu] = useState("");
   const [emailalu, setEmailalu] = useState("");
   const [alusenha, setAlusenha] = useState("");
-  const [pontmes, setPontmes] = useState("0");
-  const [pontano, setPontano] = useState("0");
   const [nometur, setNometur] = useState(""); // Agora será uma string selecionada do Picker
   const navigation = useNavigation();
 
@@ -19,26 +17,27 @@ const CadastroAlunoScreen = () => {
       Alert.alert("Erro", "Por favor, preencha todos os campos!");
       return;
     }
-  
+
     try {
       const response = await axios.post(
-        "http:///PassaporteCulturalSite/php/cadAluno.php",
+        "http://192.168.1.100/PassaporteCulturalSite/php/cadAluno.php",
         new URLSearchParams({
           rmalu,
           nomealu,
           emailalu,
           alusenha,
           nometur,
+          fotoalu: "1", // Valor fixo por enquanto, podemos mudar para upload no futuro
         }),
         { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
       );
-  
+
       const data = response.data;
       if (data.message) {
         Alert.alert("Sucesso", data.message);
         navigation.navigate("Login");
       } else if (data.error) {
-        Alert.alert("Falha ao cadastrar", "Email já existente ou RM já em uso"); // Mostra a mensagem de erro, incluindo "E-mail já cadastrado!"
+        Alert.alert("Falha ao cadastrar", "Email já existente ou RM já em uso"); // Mostra a mensagem de erro
       }
     } catch (error) {
       console.error(error);

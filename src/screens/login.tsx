@@ -24,7 +24,7 @@ export default function LoginScreen() {
 
     try {
       const response = await fetch(
-        "http:///PassaporteCulturalSite/php/loginAluno.php",
+        "http://192.168.1.100/PassaporteCulturalSite/php/loginAluno.php",
         {
           method: "POST",
           body: data,

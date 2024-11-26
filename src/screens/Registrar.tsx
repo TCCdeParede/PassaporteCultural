@@ -75,7 +75,7 @@ export default function RegistrarVisitaScreen({
       local: selectedOption,
       photos: photosBase64, // Passando as imagens codificadas em base64
       rev: "Pendente",
-      rmprof: null, 
+      rmprof: null,
     };
 
     console.log(
@@ -85,7 +85,7 @@ export default function RegistrarVisitaScreen({
 
     try {
       const response = await fetch(
-        "http://192.168.1.104/PassaporteCulturalSite/php/visita.php",
+        "http://192.168.1.100/PassaporteCulturalSite/php/visita.php",
         {
           method: "POST",
           headers: {
