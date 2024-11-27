@@ -5,6 +5,7 @@ interface User {
   turma: string;
   pontos: number;
   rm: number;
+  foto: string | null;
 }
 
 interface UserContextProps {

@@ -1,33 +1,76 @@
 import React, { useState } from "react";
-import { StyleSheet, View, TextInput, Button, Text, Alert } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Button,
+  Text,
+  Alert,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
+import * as ImagePicker from "expo-image-picker";
 
 const CadastroAlunoScreen = () => {
   const [rmalu, setRmalu] = useState("");
   const [nomealu, setNomealu] = useState("");
   const [emailalu, setEmailalu] = useState("");
   const [alusenha, setAlusenha] = useState("");
-  const [nometur, setNometur] = useState(""); // Agora será uma string selecionada do Picker
+  const [nometur, setNometur] = useState("");
+  const [imageUri, setImageUri] = useState<string | null>(null); // Armazena o URI da imagem
   const navigation = useNavigation();
 
-  const handleSubmit = async () => {
-    if (!rmalu || !nomealu || !emailalu || !alusenha || !nometur) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos!");
+  const pickImage = async () => {
+    // Solicita permissões para acessar a galeria
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert(
+        "Permissão necessária",
+        "Precisamos da sua permissão para acessar a galeria!"
+      );
       return;
     }
 
     try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        base64: true, // Inclui a imagem como base64 no retorno
+        quality: 0.5, // Reduz qualidade para economizar armazenamento
+      });
+
+      if (!result.canceled) {
+        const selectedImageUri = result.assets[0].uri; // Corrigido para o novo formato
+        setImageUri(selectedImageUri);
+      }
+    } catch (error) {
+      console.error("Erro ao abrir galeria: ", error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!rmalu || !nomealu || !emailalu || !alusenha || !nometur || !imageUri) {
+      Alert.alert(
+        "Erro",
+        "Por favor, preencha todos os campos e selecione uma foto!"
+      );
+      return;
+    }
+
+    try {
+      // Lê a imagem como base64 para envio ao servidor
       const response = await axios.post(
-        "http://192.168.1.100/PassaporteCulturalSite/php/cadAluno.php",
+        "http://192.168.18.5/PassaporteCulturalSite/php/cadAluno.php",
         new URLSearchParams({
           rmalu,
           nomealu,
           emailalu,
           alusenha,
           nometur,
-          fotoalu: "1", // Valor fixo por enquanto, podemos mudar para upload no futuro
+          fotoalu: imageUri, // Envia a URI (pode ser ajustado no backend)
         }),
         { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
       );
@@ -37,7 +80,7 @@ const CadastroAlunoScreen = () => {
         Alert.alert("Sucesso", data.message);
         navigation.navigate("Login");
       } else if (data.error) {
-        Alert.alert("Falha ao cadastrar", "Email já existente ou RM já em uso"); // Mostra a mensagem de erro
+        Alert.alert("Falha ao cadastrar", data.error);
       }
     } catch (error) {
       console.error(error);
@@ -86,15 +129,21 @@ const CadastroAlunoScreen = () => {
         <Picker.Item label="3DSB" value="3DSB" />
         <Picker.Item label="3EAA" value="3EAA" />
         <Picker.Item label="3EAB" value="3EAB" />
-        <Picker.Item label="2DSA" value="2DSA" />
-        <Picker.Item label="2DSB" value="2DSB" />
-        <Picker.Item label="2EAA" value="2EAA" />
-        <Picker.Item label="2EAB" value="2EAB" />
-        <Picker.Item label="1DSA" value="1DSA" />
-        <Picker.Item label="1DSB" value="1DSB" />
-        <Picker.Item label="1EAA" value="1EAA" />
-        <Picker.Item label="1EAB" value="1EAB" />
       </Picker>
+
+      {/* Se não houver imagem selecionada, exibe o botão */}
+      {!imageUri && (
+        <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
+          <Text style={styles.imagePickerText}>Selecionar Foto</Text>
+        </TouchableOpacity>
+      )}
+
+      {/* Exibe a imagem e permite selecionar outra ao clicar nela */}
+      {imageUri && (
+        <TouchableOpacity onPress={pickImage}>
+          <Image source={{ uri: imageUri }} style={styles.imagePreview} />
+        </TouchableOpacity>
+      )}
 
       <Button title="Cadastrar" onPress={handleSubmit} color={"#001f3f"} />
     </View>
@@ -122,16 +171,33 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     borderRadius: 5,
     backgroundColor: "rgb(196, 221, 230)",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   label: {
     fontSize: 16,
     marginBottom: 10,
     fontWeight: "bold",
+  },
+  imagePicker: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "#007BFF", // Cor igual aos inputs
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#0056b3",
+    alignSelf: "center",
+  },
+  imagePickerText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  imagePreview: {
+    width: 100,
+    height: 100,
+    marginVertical: 20,
+    borderRadius: 50,
+    alignSelf: "center",
   },
 });
 

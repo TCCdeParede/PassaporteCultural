@@ -9,8 +9,13 @@ const PerfilScreen = ({ navigation }: any) => {
     <View style={styles.container}>
       {user ? (
         <>
+          {/* Exibe a imagem de perfil ou um ícone padrão */}
           <Image
-            source={require("../../assets/DefaultUserIcon.png")}
+            source={
+              user.foto && user.foto.startsWith("file://")
+                ? { uri: user.foto } // Se for um caminho de arquivo local, use ele diretamente
+                : require("../../assets/DefaultUserIcon.png")
+            }
             style={styles.profileImage}
           />
           <View style={styles.info}>
@@ -51,7 +56,7 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 210,
     height: 210,
-    borderRadius: 150,
+    borderRadius: 105, // Para fazer um círculo perfeito
     marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },

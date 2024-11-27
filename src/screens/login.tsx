@@ -24,7 +24,7 @@ export default function LoginScreen() {
 
     try {
       const response = await fetch(
-        "http://192.168.1.100/PassaporteCulturalSite/php/loginAluno.php",
+        "http://192.168.18.5/PassaporteCulturalSite/php/loginAluno.php",
         {
           method: "POST",
           body: data,
@@ -39,6 +39,7 @@ export default function LoginScreen() {
           turma: responseData.turma,
           pontos: responseData.pontos,
           rm: responseData.rm,
+          foto: responseData.foto,
         });
 
         // Redirecionar para a tela principal
