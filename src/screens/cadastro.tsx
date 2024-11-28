@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
+import FormData from "form-data";
 
 const CadastroAlunoScreen = () => {
   const [rmalu, setRmalu] = useState("");
@@ -60,19 +61,29 @@ const CadastroAlunoScreen = () => {
       return;
     }
 
+    const formData = new FormData();
+    formData.append("rmalu", rmalu);
+    formData.append("nomealu", nomealu);
+    formData.append("emailalu", emailalu);
+    formData.append("alusenha", alusenha);
+    formData.append("nometur", nometur);
+
+    // Adiciona a imagem
+    formData.append("fotoalu", {
+      uri: imageUri,
+      type: "image/jpeg",
+      name: "foto.jpg",
+    });
+
     try {
-      // Lê a imagem como base64 para envio ao servidor
       const response = await axios.post(
-        "http://192.168.18.5/PassaporteCulturalSite/php/cadAluno.php",
-        new URLSearchParams({
-          rmalu,
-          nomealu,
-          emailalu,
-          alusenha,
-          nometur,
-          fotoalu: imageUri, // Envia a URI (pode ser ajustado no backend)
-        }),
-        { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+        "http://192.168.1.105/PassaporteCulturalSite/php/cadAluno.php",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
       const data = response.data;
@@ -80,7 +91,7 @@ const CadastroAlunoScreen = () => {
         Alert.alert("Sucesso", data.message);
         navigation.navigate("Login");
       } else if (data.error) {
-        Alert.alert("Falha ao cadastrar", data.error);
+        Alert.alert("Erro", data.error);
       }
     } catch (error) {
       console.error(error);

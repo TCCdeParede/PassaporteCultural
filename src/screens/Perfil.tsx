@@ -12,12 +12,18 @@ const PerfilScreen = ({ navigation }: any) => {
           {/* Exibe a imagem de perfil ou um ícone padrão */}
           <Image
             source={
-              user.foto && user.foto.startsWith("file://")
-                ? { uri: user.foto } // Se for um caminho de arquivo local, use ele diretamente
-                : require("../../assets/DefaultUserIcon.png")
+              user.foto
+                ? {
+                    uri: `http://192.168.1.105/PassaporteCulturalSite/${user.foto.replace(
+                      "../",
+                      ""
+                    )}`, // Remove '../' do caminho
+                  }
+                : require("../../assets/DefaultUserIcon.png") // Ícone padrão caso não tenha foto
             }
             style={styles.profileImage}
           />
+
           <View style={styles.info}>
             <Text style={styles.name}>{user.name}</Text>
             <Text style={styles.turma}>Turma: {user.turma}</Text>
