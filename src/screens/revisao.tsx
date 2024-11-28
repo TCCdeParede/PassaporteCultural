@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, Text, FlatList, Alert, StyleSheet } from "react-native";
 import { useUser } from "../UserContext"; // Importando o contexto
 import { useFocusEffect } from "@react-navigation/native";
@@ -12,7 +12,7 @@ const Revisao = () => {
 
     try {
       const response = await fetch(
-        `http://192.168.18.5/PassaporteCulturalSite/php/revisar_visitas.php?rmalu=${user.rm}` // Passando o rmalu como parâmetro
+        `http:///PassaporteCulturalSite/php/revisar_visitas.php?rmalu=${user.rm}` // Passando o rmalu como parâmetro
       );
       const data = await response.json();
       if (data.status === "sucesso") {
@@ -63,12 +63,18 @@ const Revisao = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={visitas}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.idfoto.toString()}
-        contentContainerStyle={styles.listContent} // Adicionado para garantir padding na lista
-      />
+      {visitas.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyMessage}>Ainda não há visitas registradas.</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={visitas}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.idfoto.toString()}
+          contentContainerStyle={styles.listContent} // Adicionado para garantir padding na lista
+        />
+      )}
     </View>
   );
 };
@@ -78,8 +84,14 @@ const styles = StyleSheet.create({
     flex: 1, // Certifica-se de que ocupa a tela inteira
     backgroundColor: "#ead8b1", // Cor de fundo
   },
+  emptyContainer: {
+    flex: 1, // Faz o container ocupar toda a altura disponível
+    justifyContent: "center", // Centraliza verticalmente a mensagem
+    alignItems: "center", // Centraliza horizontalmente a mensagem
+  },
   listContent: {
     padding: 15, // Adicionado padding para espaçamento interno da lista
+    marginTop: 30, // Adiciona uma margem superior para que as revisões não fiquem no topo
   },
   itemContainer: {
     padding: 15,
@@ -98,6 +110,11 @@ const styles = StyleSheet.create({
   },
   motivo: { color: "red", marginTop: 10 },
   pontos: { color: "green", marginTop: 10 },
+  emptyMessage: {
+    textAlign: "center", // Centraliza o texto horizontalmente
+    fontSize: 18, // Tamanho da fonte
+    color: "#555", // Cor do texto
+  },
 });
 
 export default Revisao;

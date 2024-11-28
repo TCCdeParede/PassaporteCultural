@@ -85,7 +85,7 @@ export default function RegistrarVisitaScreen({
 
     try {
       const response = await fetch(
-        "http://192.168.18.5/PassaporteCulturalSite/php/visita.php",
+        "http:///PassaporteCulturalSite/php/visita.php",
         {
           method: "POST",
           headers: {
@@ -121,8 +121,8 @@ export default function RegistrarVisitaScreen({
 
   // Função para adicionar mais fotos
   const addPhoto = async () => {
-    if (photos.length >= 3) {
-      Alert.alert("Limite atingido", "Você já atingiu o limite de 3 fotos.");
+    if(photos.length >= 5)  {
+      Alert.alert("Limite máximo atingido", "Você só pode adicionar até 5 fotos");
       return;
     }
 
@@ -144,14 +144,26 @@ export default function RegistrarVisitaScreen({
     }
   };
 
+  // Função para excluir uma foto
+  const removePhoto = (uri: string) => {
+    setPhotos((prev) => prev.filter((photo) => photo.uri !== uri));
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Fotos</Text>
       {photos.map((photo, index) => (
         <View key={index} style={styles.photoContainer}>
           <Image source={{ uri: photo.uri }} style={styles.image} />
-          {index === 0 && photo.date && (
-            <Text style={styles.dateText}>Data: {photo.date}</Text>
+          {photo.date && <Text style={styles.dateText}>Data: {photo.date}</Text>}
+          {/* Exibe o botão de excluir apenas para fotos após a primeira */}
+          {index > 0 && (
+            <TouchableOpacity
+              style={styles.removeButton}
+              onPress={() => removePhoto(photo.uri)}
+            >
+              <Text style={styles.removeButtonText}>Excluir</Text>
+            </TouchableOpacity>
           )}
         </View>
       ))}
@@ -231,6 +243,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#111",
   },
+  removeButton: {
+    backgroundColor: "red",
+    padding: 5,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  removeButtonText: {
+    color: "#fff",
+    fontSize: 14,
+  },
   locationText: {
     fontSize: 14,
     color: "#111",
@@ -257,6 +279,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
+ 
+
   addButton: {
     backgroundColor: "#001f3f",
     padding: 10,
