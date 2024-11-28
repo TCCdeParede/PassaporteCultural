@@ -63,7 +63,7 @@ const CadastroAlunoScreen = () => {
     try {
       // Lê a imagem como base64 para envio ao servidor
       const response = await axios.post(
-        "http://192.168.18.5/PassaporteCulturalSite/php/cadAluno.php",
+        "http:///PassaporteCulturalSite/php/cadAluno.php",
         new URLSearchParams({
           rmalu,
           nomealu,
@@ -94,10 +94,17 @@ const CadastroAlunoScreen = () => {
       <TextInput
         placeholder="RM"
         value={rmalu}
-        onChangeText={setRmalu}
+        onChangeText={(text) => {
+          // Verifica se o texto contém apenas números e se o comprimento é 5
+          if (/^\d{0,5}$/.test(text)) {
+            setRmalu(text);
+          }
+        }}
         keyboardType="numeric"
+        maxLength={5}
         style={styles.input}
       />
+
       <TextInput
         placeholder="Nome"
         value={nomealu}
@@ -181,12 +188,13 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: "#007BFF", // Cor igual aos inputs
+    backgroundColor: "rgb(196, 221, 230)",
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#0056b3",
     alignSelf: "center",
+    marginVertical: 5
   },
   imagePickerText: {
     color: "#fff",
