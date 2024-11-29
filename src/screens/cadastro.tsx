@@ -147,6 +147,14 @@ const CadastroAlunoScreen = () => {
         <Picker.Item label="3DSB" value="3DSB" />
         <Picker.Item label="3EAA" value="3EAA" />
         <Picker.Item label="3EAB" value="3EAB" />
+        <Picker.Item label="2DSA" value="2DSA" />
+        <Picker.Item label="2DSB" value="2DSB" />
+        <Picker.Item label="2EAA" value="2EAA" />
+        <Picker.Item label="2EAB" value="2EAB" />
+        <Picker.Item label="1DSA" value="1DSA" />
+        <Picker.Item label="1DSB" value="1DSB" />
+        <Picker.Item label="1EAA" value="1EAA" />
+        <Picker.Item label="1EAB" value="1EAB" />
       </Picker>
 
       {/* Se não houver imagem selecionada, exibe o botão */}
@@ -205,7 +213,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#0056b3",
     alignSelf: "center",
-    marginVertical: 5
+    marginVertical: 5,
   },
   imagePickerText: {
     color: "#fff",
