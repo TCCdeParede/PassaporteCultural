@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios'; // Para fazer requisição ao backend
+import axios from 'axios';
+import { useUser } from '../UserContext';
 
-const EditProfileScreen = () => {
-  const [name, setName] = useState('');
-  const [profileImage, setProfileImage] = useState<string | null>(null); // Permitir que seja null inicialmente
+const EditProfileScreen = ({ navigation }: any) => {
+  const { user, setUser } = useUser();
+  const [name, setName] = useState(user?.name || '');
+  const [profileImage, setProfileImage] = useState<string | null>(user?.foto || null);
 
+  // Quando o usuário for alterado, atualizar os estados
+  useEffect(() => {
+    if (user) {
+      setName(user.name);
+      setProfileImage(user.foto);
+    }
+  }, [user]);
+
+  // Função para escolher a nova foto
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -16,20 +27,21 @@ const EditProfileScreen = () => {
     });
 
     if (!result.canceled && result.assets) {
-      setProfileImage(result.assets[0].uri); // Define a imagem escolhida
+      setProfileImage(result.assets[0].uri);
     }
   };
 
+  // Função para salvar as alterações no perfil
   const handleSave = async () => {
     try {
-      // Lógica para salvar no banco de dados MySQL
       const formData = new FormData();
-      formData.append('name', name);
+      formData.append('rmalu', String(user?.rm));
+      formData.append('nomealu', name);
 
       if (profileImage) {
+        // Preparar a imagem para envio
         const uriParts = profileImage.split('.');
         const fileType = uriParts[uriParts.length - 1];
-        
         formData.append('profileImage', {
           uri: profileImage,
           name: `profile.${fileType}`,
@@ -37,12 +49,23 @@ const EditProfileScreen = () => {
         });
       }
 
-      const response = await axios.post('http://seu-servidor.com/update-profile', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      const response = await axios.post('http:///PassaporteCulturalSite/php/updateperfil.php', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
-      if (response.status === 200) {
+      if (response.data.message) {
+        // Atualiza o usuário com a nova foto após sucesso
+        setUser({
+          ...user!,
+          name,
+          foto: response.data.fotoPath, // Caminho da nova foto retornado pelo servidor
+        });
         alert('Perfil atualizado com sucesso!');
+        navigation.goBack();
+      } else {
+        alert('Falha ao atualizar o perfil');
       }
     } catch (error) {
       console.error('Erro ao salvar perfil:', error);
@@ -52,10 +75,14 @@ const EditProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Exibe a imagem de perfil */}
       <View style={styles.imageContainer}>
         {profileImage ? (
-          <Image source={{ uri: profileImage }} style={styles.profileImage} />
+          <Image
+            source={{
+              uri: profileImage,
+            }}
+            style={styles.profileImage}
+          />
         ) : (
           <Image source={require('../../assets/DefaultUserIcon.png')} style={styles.profileImage} />
         )}
@@ -64,7 +91,6 @@ const EditProfileScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Atualizar Nome */}
       <TextInput
         style={styles.input}
         placeholder="Digite seu nome"
@@ -85,7 +111,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ead8b1'
+    backgroundColor: '#ead8b1',
   },
   imageContainer: {
     position: 'relative',
@@ -114,7 +140,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: '100%',
     borderRadius: 50,
-    backgroundColor: 'rgb(196, 221, 230);'
+    backgroundColor: 'rgb(196, 221, 230)',
   },
   saveButton: {
     backgroundColor: '#001f3f',

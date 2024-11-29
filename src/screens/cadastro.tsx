@@ -77,7 +77,7 @@ const CadastroAlunoScreen = () => {
 
     try {
       const response = await axios.post(
-        "http://192.168.1.105/PassaporteCulturalSite/php/cadAluno.php",
+        "http:///PassaporteCulturalSite/php/cadAluno.php",
         formData,
         {
           headers: {

@@ -4,6 +4,8 @@ interface User {
   name: string;
   turma: string;
   pontos: number;
+  pontMes: number;
+  pontAno: number;
   rm: number;
   foto: string | null;
 }
