@@ -16,7 +16,7 @@ const PerfilScreen = ({ navigation }: any) => {
             source={
               user.foto
                 ? {
-                    uri: `http://192.168.0.9/PassaporteCulturalSite/${user.foto.replace(
+                    uri: `http:///PassaporteCulturalSite/${user.foto.replace(
                       "../",
                       ""
                     )}`,
