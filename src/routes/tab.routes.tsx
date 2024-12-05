@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -11,6 +12,22 @@ import LoginScreen from "../screens/login";
 import CadastroAlunoScreen from "../screens/cadastro";
 import Revisao from "../screens/revisao";
 import RedefinirSenha from "../screens/RedefinirSenha";
+=======
+// src/routes/tab.routes.tsx
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Feather } from '@expo/vector-icons';
+import Foto from '../screens/Foto';
+import Perfil from '../screens/Perfil';
+import Config from '../screens/Config';
+import EditarPerfil from '../screens/EditarPerfil';
+import Registrar from '../screens/Registrar';
+import LoginScreen from '../screens/login';
+import CadastroAlunoScreen from '../screens/cadastro';
+import Revisao from '../screens/revisao';
+import { UserProvider } from '..//UserContext'; // Ajuste o caminho para o seu contexto
+>>>>>>> c10dd58275a0f305b76c85ee58450d8b2939faf0
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -84,6 +101,7 @@ function TabRoutes() {
 // Navegação geral (Stack)
 export default function AppRoutes() {
   return (
+<<<<<<< HEAD
     <Stack.Navigator>
       <Stack.Screen
         name="Login"
@@ -130,5 +148,50 @@ export default function AppRoutes() {
         }}
       />
     </Stack.Navigator>
+=======
+    <UserProvider>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Cadastro"
+          component={CadastroAlunoScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TabRoutes"
+          component={TabRoutes}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="EditarPerfil"
+          component={EditarPerfil}
+          options={{
+            title: 'Editar Perfil',
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: '#001f3f',
+            },
+            headerTintColor: '#FFF',
+          }}
+        />
+        <Stack.Screen
+          name="RegistrarVisita"
+          component={Registrar}
+          options={{
+            title: 'Registrar Visita',
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: '#001f3f',
+            },
+            headerTintColor: '#FFF',
+          }}
+        />
+      </Stack.Navigator>
+    </UserProvider>
+>>>>>>> c10dd58275a0f305b76c85ee58450d8b2939faf0
   );
 }

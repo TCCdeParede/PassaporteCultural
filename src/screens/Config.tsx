@@ -1,89 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Linking, StyleSheet, useColorScheme } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, TouchableOpacity, Linking, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ThemeContext } from '../../App'; // Certifique-se de ajustar o caminho conforme necessário
 
-const SettingsScreen = () => {
-  const systemTheme = useColorScheme(); // Detecta o tema do sistema (light ou dark)
-  const [theme, setTheme] = useState('system'); // Estado que armazena a escolha do tema
-  const appVersion = '1.0.0'; // Versão do app
-
-  useEffect(() => {
-    // Carregar a preferência de tema armazenada
-    const loadTheme = async () => {
-      const savedTheme = await AsyncStorage.getItem('theme');
-      if (savedTheme) {
-        setTheme(savedTheme);
-      } else {
-        // Se não tiver uma preferência salva, use o tema do sistema
-        setTheme(systemTheme);
-      }
-    };
-
-    loadTheme();
-  }, [systemTheme]);
+const ConfigScreen: React.FC = () => {
+  const { theme, setTheme } = useContext(ThemeContext);
+  const [selectedTheme, setSelectedTheme] = useState<string>(theme);
 
   useEffect(() => {
-    // Salvar a preferência de tema sempre que o usuário mudar
-    const saveTheme = async () => {
-      await AsyncStorage.setItem('theme', theme);
-    };
-
-    saveTheme();
+    setSelectedTheme(theme);
   }, [theme]);
 
-  const getCurrentTheme = () => {
-    if (theme === 'system') {
-      return systemTheme; // Usar o tema do sistema
-    }
-    return theme; // Usar o tema escolhido (light ou dark)
+  const changeTheme = async (newTheme: string) => {
+    setSelectedTheme(newTheme);
+    setTheme(newTheme);
+    await AsyncStorage.setItem('theme', newTheme);
   };
 
-  const currentTheme = getCurrentTheme();
-
-  // Definindo as cores com base no tema atual
-  const containerStyle = currentTheme === 'dark' ? styles.darkContainer : styles.lightContainer;
-
   return (
-    <View style={[styles.container, containerStyle]}>
-      {/* Opções de Tema */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Tema</Text>
-        <View style={styles.radioButtonGroup}>
-          {[{ value: 'system', label: 'Automático (sistema)' }, { value: 'light', label: 'Tema Claro' }, { value: 'dark', label: 'Tema Escuro' }]
-            .map((option) => (
-              <TouchableOpacity
-                key={option.value}
-                style={styles.radioButtonContainer}
-                onPress={() => setTheme(option.value)}
-              >
-                <RadioButton
-                  value={option.value}
-                  color="#001f3f"
-                  status={theme === option.value ? 'checked' : 'unchecked'}
-                  onPress={() => setTheme(option.value)}
-                />
-                <Text style={styles.radioText}>{option.label}</Text>
-              </TouchableOpacity>
-            ))}
-        </View>
-      </View>
-
-      {/* Termos de Uso */}
-      <View style={styles.section}>
-        <TouchableOpacity onPress={() => Linking.openURL('https://seusite.com/termos')}>
-          <Text style={styles.linkText}>Ler os Termos de Uso</Text>
+    <View
+      style={[
+        styles.container,
+        selectedTheme === 'dark' ? styles.darkContainer : styles.lightContainer,
+      ]}
+    >
+      <Text
+        style={[
+          styles.sectionTitle,
+          selectedTheme === 'dark' ? styles.darkText : styles.lightText,
+        ]}
+      >
+        Tema
+      </Text>
+      {['system', 'light', 'dark'].map((option) => (
+        <TouchableOpacity
+          key={option}
+          onPress={() => changeTheme(option)}
+          style={[
+            styles.radioButtonContainer,
+            selectedTheme === 'dark' ? styles.darkButton : styles.lightButton,
+          ]}
+        >
+          <RadioButton
+            value={option}
+            status={selectedTheme === option ? 'checked' : 'unchecked'}
+            uncheckedColor={selectedTheme === 'dark' ? '#FFF' : '#000'}
+            color={selectedTheme === 'dark' ? '#FFF' : '#000'}
+          />
+          <Text
+            style={[
+              styles.radioText,
+              selectedTheme === 'dark' ? styles.darkText : styles.lightText,
+            ]}
+          >
+            {option === 'system' ? 'Automático' : option === 'light' ? 'Claro' : 'Escuro'}
+          </Text>
         </TouchableOpacity>
-      </View>
+      ))}
 
-      {/* Versão do Aplicativo */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Versão do Aplicativo</Text>
-        <Text>{appVersion}</Text>
-      </View>
+      <TouchableOpacity onPress={() => Linking.openURL('https://seusite.com/termos')}>
+        <Text
+          style={[
+            styles.linkText,
+            selectedTheme === 'dark' ? styles.darkLink : styles.lightLink,
+          ]}
+        >
+          Ler os Termos de Uso
+        </Text>
+      </TouchableOpacity>
+
+      <Text
+        style={[
+          styles.versionText,
+          selectedTheme === 'dark' ? styles.darkText : styles.lightText,
+        ]}
+      >
+        Versão do Aplicativo: 1.0.0
+      </Text>
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -91,49 +89,63 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   darkContainer: {
-    backgroundColor: '#333',
+    backgroundColor: '#001529',
   },
   lightContainer: {
     backgroundColor: '#ead8b1',
   },
-  section: {
-    marginVertical: 20,
-    shadowColor: '#000',
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  radioButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+    borderRadius: 8,
+    padding: 10,
+  },
+  darkButton: {
+    backgroundColor: '#333',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
   },
-  sectionTitle: {
-    marginTop: 25,
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  radioButtonGroup: {
-    flexDirection: 'column',
-    backgroundColor: '#6a9ab0',
-    borderRadius: 10,
-    padding: 10,
-  },
-  radioButtonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 8,
-    backgroundColor: '#6a9ab0',
-    marginBottom: 10,
+  lightButton: {
+    backgroundColor: 'rgb(196, 221, 230)',
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   radioText: {
-    marginLeft: 12,
-    fontSize: 18,
-    color: '#fff',
+    marginLeft: 10,
+    fontSize: 16,
   },
   linkText: {
-    color: '#001f3f',
-    fontSize: 18,
+    marginTop: 20,
+    fontSize: 16,
+  },
+  darkLink: {
+    color: '#80D8FF',
+  },
+  lightLink: {
+    color: '#007BFF',
+  },
+  versionText: {
+    marginTop: 30,
+    fontSize: 14,
+  },
+  darkText: {
+    color: '#FFF',
+  },
+  lightText: {
+    color: '#000',
   },
 });
 
-export default SettingsScreen;
+export default ConfigScreen;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,6 +14,7 @@ import { RootStackParamList } from "../type";
 import * as ImagePicker from "expo-image-picker";
 import { useUser } from "../UserContext";
 import * as FileSystem from "expo-file-system"; // Para manipulação de arquivos
+import { ThemeContext } from "../../App"; // Importando o ThemeContext
 
 type RegistrarVisitaScreenProps = {
   route: RouteProp<RootStackParamList, "RegistrarVisita">;
@@ -39,6 +40,7 @@ export default function RegistrarVisitaScreen({
   ]);
   const { user } = useUser();
   const navigation = useNavigation();
+  const { theme } = useContext(ThemeContext); // Obtendo o tema atual
 
   // Função para converter a imagem para base64
   const convertToBase64 = async (uri: string) => {
@@ -121,7 +123,7 @@ export default function RegistrarVisitaScreen({
 
   // Função para adicionar mais fotos
   const addPhoto = async () => {
-    if(photos.length >= 5)  {
+    if (photos.length >= 5) {
       Alert.alert("Limite máximo atingido", "Você só pode adicionar até 5 fotos");
       return;
     }
@@ -150,29 +152,32 @@ export default function RegistrarVisitaScreen({
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Fotos</Text>
+    <ScrollView contentContainerStyle={[styles.container, theme === "dark" ? styles.darkContainer : styles.lightContainer]}>
+      <Text style={[styles.title, theme === "dark" ? styles.darkText : styles.lightText]}>Fotos</Text>
       {photos.map((photo, index) => (
         <View key={index} style={styles.photoContainer}>
           <Image source={{ uri: photo.uri }} style={styles.image} />
-          {photo.date && <Text style={styles.dateText}>Data: {photo.date}</Text>}
+          {photo.date && <Text style={[styles.dateText, theme === "dark" ? styles.darkText : styles.lightText]}>Data: {photo.date}</Text>}
           {/* Exibe o botão de excluir apenas para fotos após a primeira */}
           {index > 0 && (
             <TouchableOpacity
-              style={styles.removeButton}
+              style={[styles.removeButton, theme === "dark" && styles.darkButton]}
               onPress={() => removePhoto(photo.uri)}
             >
-              <Text style={styles.removeButtonText}>Excluir</Text>
+              <Text style={[styles.removeButtonText, theme === "dark" && styles.darkText]}>Excluir</Text>
             </TouchableOpacity>
           )}
         </View>
       ))}
 
-      <TouchableOpacity style={styles.addButton} onPress={addPhoto}>
+      <TouchableOpacity
+        style={[styles.addButton, theme === "dark" ? styles.darkButton : styles.lightButton]}
+        onPress={addPhoto}
+      >
         <Text style={styles.addButtonText}>Adicionar Foto</Text>
       </TouchableOpacity>
-      <Text style={styles.title}>A que local sua visita está atribuída?</Text>
-      <View style={styles.radioContainer}>
+      <Text style={[styles.title, theme === "dark" ? styles.darkText : styles.lightText]}>A que local sua visita está atribuída?</Text>
+      <View style={[styles.radioContainer, theme === "dark" ? styles.darkRadioContainer : styles.lightRadioContainer]}>
         {[
           "Show",
           "Teatro",
@@ -189,10 +194,13 @@ export default function RegistrarVisitaScreen({
             <RadioButton
               value={option}
               status={selectedOption === option ? "checked" : "unchecked"}
-              color="#001f3f"
+              color={theme === "dark" ? "#fff" : "#001f3f"}
+              uncheckedColor={theme === "dark" ? "#aaa" : "#555"} // Cor do ícone no estado não selecionado
               onPress={() => setSelectedOption(option)}
             />
-            <Text>{option}</Text>
+            <Text style={[theme === "dark" ? styles.darkText : styles.lightText, selectedOption !== option ? { color: theme === "dark" ? "#aaa" : "#555" } : {}]}>
+              {option}
+            </Text>
           </View>
         ))}
       </View>
@@ -201,6 +209,7 @@ export default function RegistrarVisitaScreen({
         style={[
           styles.button,
           !(photos.length >= 3 && selectedOption) && styles.buttonDisabled,
+          theme === "dark" ? styles.darkButton : styles.lightButton,
         ]}
         onPress={submitData}
         disabled={photos.length < 3 || !selectedOption}
@@ -216,13 +225,24 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
     flexGrow: 1,
+  },
+  lightContainer: {
     backgroundColor: "#ead8b1",
+  },
+  darkContainer: {
+    backgroundColor: "#001529",
   },
   title: {
     fontSize: 25,
     marginBottom: 10,
     textAlign: "center",
     fontWeight: "bold",
+  },
+  lightText: {
+    color: "#000",
+  },
+  darkText: {
+    color: "#fff",
   },
   photoContainer: {
     alignItems: "center",
@@ -253,25 +273,21 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
   },
-  locationText: {
-    fontSize: 14,
-    color: "#111",
-  },
   radioContainer: {
-    backgroundColor: "rgb(196, 221, 230)",
     padding: 10,
     width: 350,
     height: 250,
     borderRadius: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  lightRadioContainer: {
+    backgroundColor: "rgb(196, 221, 230)",
+  },
+  darkRadioContainer: {
+    backgroundColor: "rgb(70, 70, 70)",
   },
   radioButton: {
     width: "45%",
@@ -279,19 +295,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
- 
-
   addButton: {
     backgroundColor: "#001f3f",
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
     marginVertical: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   addButtonText: {
     color: "#fff",
@@ -303,14 +312,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     marginTop: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   buttonDisabled: {
     backgroundColor: "rgb(196, 221, 230)",
+  },
+  lightButton: {
+    backgroundColor: "#001f3f",
+  },
+  darkButton: {
+    backgroundColor: "#444",
   },
   buttonText: {
     color: "#fff",

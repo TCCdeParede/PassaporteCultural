@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -14,6 +14,7 @@ import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import FormData from "form-data";
+import { ThemeContext } from "../../App"; // Importe o contexto de tema
 
 const CadastroAlunoScreen = () => {
   const [rmalu, setRmalu] = useState("");
@@ -21,17 +22,14 @@ const CadastroAlunoScreen = () => {
   const [emailalu, setEmailalu] = useState("");
   const [alusenha, setAlusenha] = useState("");
   const [nometur, setNometur] = useState("");
-  const [imageUri, setImageUri] = useState<string | null>(null); // Armazena o URI da imagem
+  const [imageUri, setImageUri] = useState<string | null>(null);
   const navigation = useNavigation();
+  const { theme } = useContext(ThemeContext); // Acesse o tema atual
 
   const pickImage = async () => {
-    // Solicita permissões para acessar a galeria
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert(
-        "Permissão necessária",
-        "Precisamos da sua permissão para acessar a galeria!"
-      );
+      Alert.alert("Permissão necessária", "Precisamos da sua permissão para acessar a galeria!");
       return;
     }
 
@@ -39,12 +37,12 @@ const CadastroAlunoScreen = () => {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        base64: true, // Inclui a imagem como base64 no retorno
-        quality: 0.5, // Reduz qualidade para economizar armazenamento
+        base64: true,
+        quality: 0.5,
       });
 
       if (!result.canceled) {
-        const selectedImageUri = result.assets[0].uri; // Corrigido para o novo formato
+        const selectedImageUri = result.assets[0].uri;
         setImageUri(selectedImageUri);
       }
     } catch (error) {
@@ -54,10 +52,7 @@ const CadastroAlunoScreen = () => {
 
   const handleSubmit = async () => {
     if (!rmalu || !nomealu || !emailalu || !alusenha || !nometur || !imageUri) {
-      Alert.alert(
-        "Erro",
-        "Por favor, preencha todos os campos e selecione uma foto!"
-      );
+      Alert.alert("Erro", "Por favor, preencha todos os campos e selecione uma foto!");
       return;
     }
 
@@ -72,8 +67,6 @@ const CadastroAlunoScreen = () => {
     formData.append("emailalu", emailalu);
     formData.append("alusenha", alusenha);
     formData.append("nometur", nometur);
-
-    // Adiciona a imagem
     formData.append("fotoalu", {
       uri: imageUri,
       type: "image/jpeg",
@@ -105,48 +98,85 @@ const CadastroAlunoScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Cadastre-se</Text>
+    <View
+      style={[
+        styles.container,
+        theme === "dark" ? styles.darkContainer : styles.lightContainer,
+      ]}
+    >
+      <Text
+        style={[
+          styles.title,
+          theme === "dark" ? styles.darkText : styles.lightText,
+        ]}
+      >
+        Cadastre-se
+      </Text>
       <TextInput
         placeholder="RM"
+        placeholderTextColor={theme === "dark" ? "#ccc" : "#333"}
         value={rmalu}
         onChangeText={(text) => {
-          // Verifica se o texto contém apenas números e se o comprimento é 5
           if (/^\d{0,5}$/.test(text)) {
             setRmalu(text);
           }
         }}
         keyboardType="numeric"
         maxLength={5}
-        style={styles.input}
+        style={[
+          styles.input,
+          theme === "dark" ? styles.darkInput : styles.lightInput,
+        ]}
       />
 
       <TextInput
         placeholder="Nome"
+        placeholderTextColor={theme === "dark" ? "#ccc" : "#333"}
         value={nomealu}
         onChangeText={setNomealu}
-        style={styles.input}
+        style={[
+          styles.input,
+          theme === "dark" ? styles.darkInput : styles.lightInput,
+        ]}
       />
       <TextInput
         placeholder="Email"
+        placeholderTextColor={theme === "dark" ? "#ccc" : "#333"}
         value={emailalu}
         onChangeText={setEmailalu}
         keyboardType="email-address"
-        style={styles.input}
+        style={[
+          styles.input,
+          theme === "dark" ? styles.darkInput : styles.lightInput,
+        ]}
       />
       <TextInput
         placeholder="Senha"
+        placeholderTextColor={theme === "dark" ? "#ccc" : "#333"}
         value={alusenha}
         onChangeText={setAlusenha}
         secureTextEntry
-        style={styles.input}
+        style={[
+          styles.input,
+          theme === "dark" ? styles.darkInput : styles.lightInput,
+        ]}
       />
 
-      <Text style={styles.label}>Selecione a Turma</Text>
+      <Text
+        style={[
+          styles.label,
+          theme === "dark" ? styles.darkText : styles.lightText,
+        ]}
+      >
+        Selecione a Turma
+      </Text>
       <Picker
         selectedValue={nometur}
         onValueChange={setNometur}
-        style={styles.input}
+        style={[
+          styles.input,
+          theme === "dark" ? styles.darkInput : styles.lightInput,
+        ]}
       >
         <Picker.Item label="3DSA" value="3DSA" />
         <Picker.Item label="3DSB" value="3DSB" />
@@ -162,21 +192,32 @@ const CadastroAlunoScreen = () => {
         <Picker.Item label="1EAB" value="1EAB" />
       </Picker>
 
-      {/* Se não houver imagem selecionada, exibe o botão */}
       {!imageUri && (
-        <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
-          <Text style={styles.imagePickerText}>Selecionar Foto</Text>
+        <TouchableOpacity
+          style={[
+            styles.imagePicker,
+            theme === "dark" ? styles.darkImagePicker : styles.lightImagePicker,
+          ]}
+          onPress={pickImage}
+        >
+          <Text
+            style={[
+              styles.imagePickerText,
+              theme === "dark" ? styles.darkText : styles.lightText,
+            ]}
+          >
+            Selecionar Foto
+          </Text>
         </TouchableOpacity>
       )}
 
-      {/* Exibe a imagem e permite selecionar outra ao clicar nela */}
       {imageUri && (
         <TouchableOpacity onPress={pickImage}>
           <Image source={{ uri: imageUri }} style={styles.imagePreview} />
         </TouchableOpacity>
       )}
 
-      <Button title="Cadastrar" onPress={handleSubmit} color={"#001f3f"} />
+      <Button title="Cadastrar" onPress={handleSubmit} color={theme === "dark" ? "#555" : "#001f3f"} />
     </View>
   );
 };
@@ -186,13 +227,24 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#ead8b1",
+  },
+  lightContainer: {
+    backgroundColor: "#ead8b1", // Cor de fundo no modo claro
+  },
+  darkContainer: {
+    backgroundColor: "#001529", // Cor de fundo no modo escuro
   },
   title: {
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
+  },
+  lightText: {
+    color: "#000", // Cor do texto no modo claro
+  },
+  darkText: {
+    color: "#fff", // Cor do texto no modo escuro
   },
   input: {
     height: 50,
@@ -201,7 +253,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingLeft: 10,
     borderRadius: 5,
-    backgroundColor: "rgb(196, 221, 230)",
+  },
+  lightInput: {
+    backgroundColor: "rgb(196, 221, 230)", // Cor de fundo do input no modo claro
+    color: "#000", // Cor do texto no input no modo claro
+  },
+  darkInput: {
+    backgroundColor: "#333", // Cor de fundo do input no modo escuro
+    borderColor: "#444",
+    color: "#fff", // Cor do texto no input no modo escuro
   },
   label: {
     fontSize: 16,
@@ -209,20 +269,27 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   imagePicker: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "rgb(196, 221, 230)",
-    justifyContent: "center",
-    alignItems: "center",
+    width: 120,  
+    height: 120, 
+    borderRadius: 60, 
+    justifyContent: "center", 
+    alignItems: "center", 
     borderWidth: 1,
-    borderColor: "#0056b3",
     alignSelf: "center",
-    marginVertical: 5,
+    marginVertical: 10, 
+  },
+  lightImagePicker: {
+    backgroundColor: "rgb(196, 221, 230)",
+    borderColor: "#0056b3",
+  },
+  darkImagePicker: {
+    backgroundColor: "#444",
+    borderColor: "#0056b3",
   },
   imagePickerText: {
-    color: "#fff",
     fontWeight: "bold",
+    textAlign: "center",  
+    fontSize: 14, 
   },
   imagePreview: {
     width: 100,
@@ -230,6 +297,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     borderRadius: 50,
     alignSelf: "center",
+    marginBottom:20,
   },
 });
 
