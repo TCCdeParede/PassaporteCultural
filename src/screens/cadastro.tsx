@@ -61,6 +61,11 @@ const CadastroAlunoScreen = () => {
       return;
     }
 
+    if (alusenha.length < 8) {
+      Alert.alert("Erro", "A senha deve ter no mínimo 8 caracteres!");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("rmalu", rmalu);
     formData.append("nomealu", nomealu);
@@ -77,7 +82,7 @@ const CadastroAlunoScreen = () => {
 
     try {
       const response = await axios.post(
-        "http:///PassaporteCulturalSite/php/cadAluno.php",
+        "http://192.168.1.104/PassaporteCulturalSite/php/cadAluno.php",
         formData,
         {
           headers: {

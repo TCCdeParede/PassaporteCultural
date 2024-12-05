@@ -1,20 +1,43 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useUser } from "../UserContext";
+import { useFocusEffect } from "@react-navigation/native";
 
 const PerfilScreen = ({ navigation }: any) => {
   const { user } = useUser();
 
+  // Estado local para armazenar dados do usuário
+  const [userData, setUserData] = useState<any>(null);
+
+  // Função para resetar os dados do usuário
+  const resetUserData = () => {
+    if (user) {
+      setUserData(user);
+    }
+  };
+
+  // Atualiza os dados sempre que a tela ganhar foco
+  useFocusEffect(
+    React.useCallback(() => {
+      resetUserData(); // Atualiza os dados do usuário sempre que voltar para a tela
+    }, [user]) // Isso garante que a função seja chamada sempre que o usuário mudar
+  );
+
+  // Atualiza os dados quando o componente for montado ou quando o usuário for alterado
+  useEffect(() => {
+    resetUserData(); // Atualiza os dados do usuário na montagem do componente
+  }, [user]);
+
   return (
     <View style={styles.container}>
-      {user ? (
+      {userData ? (
         <>
           {/* Exibe a imagem de perfil ou um ícone padrão */}
           <Image
             source={
-              user.foto
+              userData.foto
                 ? {
-                    uri: `http:///PassaporteCulturalSite/${user.foto.replace(
+                    uri: `http://192.168.1.104/PassaporteCulturalSite/${userData.foto.replace(
                       "../",
                       ""
                     )}`, // Remove '../' do caminho
@@ -25,9 +48,20 @@ const PerfilScreen = ({ navigation }: any) => {
           />
 
           <View style={styles.info}>
-            <Text style={styles.name}>{user.name}</Text>
-            <Text style={styles.turma}>Turma: {user.turma}</Text>
-            <Text style={styles.pontos}>Pontos: {user.pontos}</Text>
+            <Text style={styles.name}>{userData.name}</Text>
+            <Text style={styles.turma}>Turma: {userData.turma}</Text>
+            <Text style={styles.pontos}>
+              Pontos Mensais Gerais: {userData.pontMesGeral}
+            </Text>
+            <Text style={styles.pontos}>
+              Pontos Anuais Gerais: {userData.pontAnoGeral}
+            </Text>
+            <Text style={styles.pontos}>
+              Pontos Mensais Computados: {userData.pontMesComputado}
+            </Text>
+            <Text style={styles.pontos}>
+              Pontos Anuais Computados: {userData.pontAnoComputado}
+            </Text>
           </View>
         </>
       ) : (
@@ -74,22 +108,25 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     color: "#fff",
+    textAlign: "center",
   },
   turma: {
     fontSize: 25,
     color: "rgb(196, 221, 230);",
     marginTop: 10,
+    textAlign: "center",
   },
   pontos: {
-    fontSize: 25,
+    fontSize: 20,
     color: "rgb(196, 221, 230);",
-    marginBottom: 20,
-    marginTop: 10,
+    marginBottom: 10,
+    marginTop: 5,
+    textAlign: "center",
   },
   info: {
     backgroundColor: "#001f3f",
     width: 300,
-    height: 200,
+    padding: 20, // Adicionando padding para o conteúdo
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 25,

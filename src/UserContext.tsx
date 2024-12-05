@@ -3,9 +3,10 @@ import React, { createContext, useState, useContext, ReactNode } from "react";
 interface User {
   name: string;
   turma: string;
-  pontos: number;
-  pontMes: number;
-  pontAno: number;
+  pontMesGeral: number;
+  pontAnoGeral: number;
+  pontMesComputado: number;
+  pontAnoComputado: number;
   rm: number;
   foto: string | null;
 }

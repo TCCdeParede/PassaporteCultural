@@ -1,35 +1,36 @@
-// src/routes/tab.routes.tsx
-import React, { useEffect, useState } from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Feather } from '@expo/vector-icons';
-import Foto from '../screens/Foto';
-import Perfil from '../screens/Perfil';
-import Config from '../screens/Config';
-import EditarPerfil from '../screens/EditarPerfil';
-import Registrar from '../screens/Registrar';
-import LoginScreen from '../screens/login'; // Importa a tela de login
-import CadastroAlunoScreen from '../screens/cadastro';
-import Revisao from '../screens/revisao';
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Feather } from "@expo/vector-icons";
+import Foto from "../screens/Foto";
+import Perfil from "../screens/Perfil";
+import Config from "../screens/Config";
+import EditarPerfil from "../screens/EditarPerfil";
+import Registrar from "../screens/Registrar";
+import LoginScreen from "../screens/login";
+import CadastroAlunoScreen from "../screens/cadastro";
+import Revisao from "../screens/revisao";
+import RedefinirSenha from "../screens/RedefinirSenha";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+// Navegação das abas (Tab)
 function TabRoutes() {
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#ffff',
-        tabBarInactiveTintColor: '#3a6d8c',
+        tabBarActiveTintColor: "#ffff",
+        tabBarInactiveTintColor: "#3a6d8c",
         tabBarStyle: {
-          position: 'absolute',
+          position: "absolute",
           height: 70,
-          backgroundColor: '#001f3f',
+          backgroundColor: "#001f3f",
           shadowRadius: 10,
           elevation: 5,
-          alignItems: 'center',
-          alignContent: 'center',
+          alignItems: "center",
+          alignContent: "center",
         },
         tabBarLabelStyle: {
           fontSize: 14,
@@ -80,46 +81,52 @@ function TabRoutes() {
   );
 }
 
+// Navegação geral (Stack)
 export default function AppRoutes() {
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Login"
-        component={LoginScreen}  // Tela de login será a primeira
+        component={LoginScreen} // Tela de login será a primeira
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Cadastro"
-        component={CadastroAlunoScreen}  // Tela de login será a primeira
+        component={CadastroAlunoScreen} // Tela de cadastro
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name="TabRoutes"
-        component={TabRoutes}
+        component={TabRoutes} // Tela principal de abas
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RedefinirSenha"
+        component={RedefinirSenha} // Tela de redefinir senha
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name="EditarPerfil"
         component={EditarPerfil}
         options={{
-          title: 'Editar Perfil',
+          title: "Editar Perfil",
           headerShown: true,
           headerStyle: {
-            backgroundColor: '#001f3f',
+            backgroundColor: "#001f3f",
           },
-          headerTintColor: '#FFF',
+          headerTintColor: "#FFF",
         }}
       />
       <Stack.Screen
         name="RegistrarVisita"
         component={Registrar}
         options={{
-          title: 'Registrar Visita',
+          title: "Registrar Visita",
           headerShown: true,
           headerStyle: {
-            backgroundColor: '#001f3f',
+            backgroundColor: "#001f3f",
           },
-          headerTintColor: '#FFF',
+          headerTintColor: "#FFF",
         }}
       />
     </Stack.Navigator>

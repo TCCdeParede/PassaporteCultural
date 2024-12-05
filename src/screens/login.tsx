@@ -24,7 +24,7 @@ export default function LoginScreen() {
 
     try {
       const response = await fetch(
-        "http:///PassaporteCulturalSite/php/loginAluno.php",
+        "http://192.168.1.104/PassaporteCulturalSite/php/loginAluno.php",
         {
           method: "POST",
           body: data,
@@ -37,7 +37,10 @@ export default function LoginScreen() {
         setUser({
           name: responseData.nome,
           turma: responseData.turma,
-          pontos: responseData.pontos,
+          pontMesGeral: responseData.pontMesGeral,
+          pontAnoGeral: responseData.pontAnoGeral,
+          pontMesComputado: responseData.pontMesComputado,
+          pontAnoComputado: responseData.pontAnoComputado,
           rm: responseData.rm,
           foto: responseData.foto,
         });
@@ -74,6 +77,12 @@ export default function LoginScreen() {
         onPress={() => navigation.navigate("Cadastro")}
       >
         <Text>Primeira vez? Clique aqui para se cadastrar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.CadText}
+        onPress={() => navigation.navigate("RedefinirSenha")}
+      >
+        <Text>Esqueceu sua senha? Clique aqui</Text>
       </TouchableOpacity>
       <Button title="Entrar" onPress={handleLogin} color={"#001f3f"} />
     </View>
