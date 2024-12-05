@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -10,14 +10,12 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useUser } from "../UserContext"; // Importe o contexto
-import { ThemeContext } from "../../App"; // Importe o contexto de tema
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
   const { setUser } = useUser(); // Acesse o contexto para salvar os dados do usuário
-  const { theme } = useContext(ThemeContext); // Acesse o tema atual
 
   async function handleLogin() {
     const data = new FormData();
@@ -59,58 +57,27 @@ export default function LoginScreen() {
   }
 
   return (
-    <View
-      style={[
-        styles.container,
-        theme === "dark" ? styles.darkContainer : styles.lightContainer,
-      ]}
-    >
-      <Text
-        style={[
-          styles.title,
-          theme === "dark" ? styles.darkText : styles.lightText,
-        ]}
-      >
-        Login
-      </Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
       <TextInput
-        style={[
-          styles.input,
-          theme === "dark" ? styles.darkInput : styles.lightInput,
-        ]}
+        style={styles.input}
         placeholder="Email"
-        placeholderTextColor={theme === "dark" ? "#ccc" : "#333"}
         value={email}
         onChangeText={setEmail}
       />
       <TextInput
-        style={[
-          styles.input,
-          theme === "dark" ? styles.darkInput : styles.lightInput,
-        ]}
+        style={styles.input}
         placeholder="Senha"
-        placeholderTextColor={theme === "dark" ? "#ccc" : "#333"}
         secureTextEntry
         value={password}
         onChangeText={setPassword}
       />
       <TouchableOpacity
-        style={[
-          styles.CadText,
-          theme === "dark" ? styles.darkText : styles.lightText,
-        ]}
+        style={styles.CadText}
         onPress={() => navigation.navigate("Cadastro")}
       >
-        <Text
-          style={[
-            styles.CadText,
-            theme === "dark" ? styles.darkLink : styles.lightLink,
-          ]}
-        >
-          Primeira vez? Clique aqui para se cadastrar
-        </Text>
+        <Text>Primeira vez? Clique aqui para se cadastrar</Text>
       </TouchableOpacity>
-<<<<<<< HEAD
       <TouchableOpacity
         style={styles.CadText}
         onPress={() => navigation.navigate("RedefinirSenha")}
@@ -118,9 +85,6 @@ export default function LoginScreen() {
         <Text>Esqueceu sua senha? Clique aqui</Text>
       </TouchableOpacity>
       <Button title="Entrar" onPress={handleLogin} color={"#001f3f"} />
-=======
-      <Button title="Entrar" onPress={handleLogin} color={theme === "dark" ? "#555" : "#001f3f"} />
->>>>>>> c10dd58275a0f305b76c85ee58450d8b2939faf0
     </View>
   );
 }
@@ -130,24 +94,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
-  },
-  lightContainer: {
-    backgroundColor: "#ead8b1", // Cor de fundo no modo claro
-  },
-  darkContainer: {
-    backgroundColor: "#001529", // Cor de fundo no modo escuro
+    backgroundColor: "#ead8b1",
   },
   title: {
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
-  },
-  lightText: {
-    color: "#000", // Cor do texto no modo claro
-  },
-  darkText: {
-    color: "#fff", // Cor do texto no modo escuro
   },
   input: {
     height: 50,
@@ -156,28 +109,16 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingLeft: 10,
     borderRadius: 5,
-  },
-  lightInput: {
-    backgroundColor: "rgb(196, 221, 230)", // Cor de fundo do input no modo claro
-    color: "#000", // Cor do texto no input no modo claro (garante que o texto será preto)
-  },
-  darkInput: {
-    backgroundColor: "#333", // Cor de fundo do input no modo escuro
-    borderColor: "#444",
-    color: "#fff", // Cor do texto no input no modo escuro
+    backgroundColor: "rgb(196, 221, 230)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   CadText: {
     justifyContent: "center",
     marginLeft: 25,
     marginBottom: 20,
   },
-<<<<<<< HEAD
-=======
-  lightLink: {
-    color: "#000", // Link azul no modo claro
-  },
-  darkLink: {
-    color: "#80D8FF", // Link azul claro no modo escuro
-  },
->>>>>>> c10dd58275a0f305b76c85ee58450d8b2939faf0
 });

@@ -1,25 +1,22 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   TextInput,
-  Button,
-  Image,
-  StyleSheet,
   TouchableOpacity,
   Text,
+  Image,
+  StyleSheet,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { useUser } from "../UserContext";
-import { ThemeContext } from "../../App"; // Importando o contexto de tema
 
 const EditProfileScreen = ({ navigation }: any) => {
   const { user, setUser } = useUser();
-  const { theme } = useContext(ThemeContext); // Obtendo o tema atual
   const [name, setName] = useState(user?.name || "");
   const [profileImage, setProfileImage] = useState<string | null>(
     user?.foto
-      ? `http://192.168.0.9/PassaporteCulturalSite/${user.foto.replace(
+      ? `http://192.168.1.104/PassaporteCulturalSite/${user.foto.replace(
           "../",
           ""
         )}`
@@ -31,7 +28,7 @@ const EditProfileScreen = ({ navigation }: any) => {
       setName(user.name);
       setProfileImage(
         user.foto
-          ? `http://192.168.0.9/PassaporteCulturalSite/${user.foto.replace(
+          ? `http://192.168.1.104/PassaporteCulturalSite/${user.foto.replace(
               "../",
               ""
             )}`
@@ -71,11 +68,11 @@ const EditProfileScreen = ({ navigation }: any) => {
           uri: profileImage,
           name: `profile.${fileType}`,
           type: `image/${fileType}`,
-        });
+        } as any);
       }
 
       const response = await axios.post(
-        "http:///PassaporteCulturalSite/php/updateperfil.php",
+        "http://192.168.1.104/PassaporteCulturalSite/php/updateperfil.php",
         formData,
         {
           headers: {
@@ -97,18 +94,12 @@ const EditProfileScreen = ({ navigation }: any) => {
         alert("Falha ao atualizar o perfil.");
       }
     } catch (error) {
-      console.error("Erro ao salvar perfil:", error);
       alert("Falha ao atualizar o perfil.");
     }
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        theme === "dark" ? styles.darkContainer : styles.lightContainer,
-      ]}
-    >
+    <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image
           source={
@@ -118,40 +109,20 @@ const EditProfileScreen = ({ navigation }: any) => {
           }
           style={styles.profileImage}
         />
-        <TouchableOpacity
-          style={[
-            styles.editImageButton,
-            theme === "dark" && styles.darkButton,
-          ]}
-          onPress={pickImage}
-        >
-          <Text
-            style={[styles.editImageText, theme === "dark" && styles.darkText]}
-          >
-            Editar
-          </Text>
+        <TouchableOpacity style={styles.editImageButton} onPress={pickImage}>
+          <Text style={styles.editImageText}>Editar</Text>
         </TouchableOpacity>
       </View>
 
       <TextInput
-        style={[
-          styles.input,
-          theme === "dark" ? styles.darkInput : styles.lightInput,
-        ]}
+        style={styles.input}
         placeholder="Digite seu nome"
         value={name}
         onChangeText={setName}
       />
 
-      <TouchableOpacity
-        style={[styles.saveButton, theme === "dark" && styles.darkButton]}
-        onPress={handleSave}
-      >
-        <Text
-          style={[styles.saveButtonText, theme === "dark" && styles.darkText]}
-        >
-          Salvar
-        </Text>
+      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <Text style={styles.saveButtonText}>Salvar</Text>
       </TouchableOpacity>
     </View>
   );
@@ -163,12 +134,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
     justifyContent: "center",
-  },
-  lightContainer: {
     backgroundColor: "#ead8b1",
-  },
-  darkContainer: {
-    backgroundColor: "#001529",
   },
   imageContainer: {
     position: "relative",
@@ -187,15 +153,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
   },
-  darkButton: {
-    backgroundColor: "#555",
-  },
   editImageText: {
     color: "#FFF",
     fontWeight: "bold",
-  },
-  darkText: {
-    color: "#FFF",
   },
   input: {
     borderWidth: 1,
@@ -203,15 +163,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: "100%",
     borderRadius: 50,
-  },
-  lightInput: {
     backgroundColor: "rgb(196, 221, 230)",
-    borderColor: "#ccc",
-  },
-  darkInput: {
-    backgroundColor: "#333",
-    borderColor: "#444",
-    color: "#FFF",
   },
   saveButton: {
     backgroundColor: "#001f3f",

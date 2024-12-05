@@ -14,7 +14,7 @@ import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import FormData from "form-data";
-import { ThemeContext } from "../../App"; // Importe o contexto de tema
+import { ThemeContext } from "../../App";
 
 const CadastroAlunoScreen = () => {
   const [rmalu, setRmalu] = useState("");

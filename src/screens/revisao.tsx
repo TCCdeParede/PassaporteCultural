@@ -1,14 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { View, Text, FlatList, Alert, StyleSheet } from "react-native";
 import { useUser } from "../UserContext"; // Importando o contexto
 import { useFocusEffect } from "@react-navigation/native";
-import { ThemeContext } from "../../App"; // Importa o contexto de tema
 
 const Revisao = () => {
   const { user } = useUser(); // Pegando o usuário logado
   const [visitas, setVisitas] = useState<any[]>([]); // Usando any[] para permitir qualquer formato de dado
-  const { theme } = useContext(ThemeContext); // Acessa o tema atual
-  const isDarkMode = theme === "dark"; // Determina se o modo escuro está ativo
 
   const fetchVisitas = async () => {
     if (!user) return; // Verifica se há um usuário logado
@@ -45,32 +42,30 @@ const Revisao = () => {
   };
 
   const renderItem = ({ item }: { item: any }) => (
-    <View style={[styles.itemContainer, isDarkMode && styles.darkItemContainer]}>
-      <Text style={isDarkMode ? styles.darkText : styles.lightText}>Local: {item.local}</Text>
-      <Text style={isDarkMode ? styles.darkText : styles.lightText}>Data: {formatDate(item.data)}</Text>
+    <View style={styles.itemContainer}>
+      <Text>Local: {item.local}</Text>
+      <Text>Data: {formatDate(item.data)}</Text>
 
       {/* Exibe o estado da visita */}
-      <Text style={[styles.status, isDarkMode && styles.darkText]}>Status: {item.rev}</Text>
+      <Text style={styles.status}>Status: {item.rev}</Text>
 
       {/* Condicional para exibir o motivo se o estado for 'Não Aceito' */}
       {item.rev === "Não aceito" && item.motivo && (
-        <Text style={[styles.motivo, isDarkMode && styles.darkText]}>Motivo: {item.motivo}</Text>
+        <Text style={styles.motivo}>Motivo: {item.motivo}</Text>
       )}
 
       {/* Condicional para exibir os pontos se o estado for 'Aceito' */}
       {item.rev === "Aceito" && item.pontos && (
-        <Text style={[styles.pontos, isDarkMode && styles.darkText]}>Pontos: {item.pontos}</Text>
+        <Text style={styles.pontos}>Pontos: {item.pontos}</Text>
       )}
     </View>
   );
 
   return (
-    <View style={[styles.container, isDarkMode ? styles.darkContainer : styles.lightContainer]}>
+    <View style={styles.container}>
       {visitas.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Text style={[styles.emptyMessage, isDarkMode && styles.darkText]}>
-            Ainda não há visitas registradas.
-          </Text>
+          <Text style={styles.emptyMessage}>Ainda não há visitas registradas.</Text>
         </View>
       ) : (
         <FlatList
@@ -87,12 +82,7 @@ const Revisao = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1, // Certifica-se de que ocupa a tela inteira
-  },
-  darkContainer: {
-    backgroundColor: '#001529',
-  },
-  lightContainer: {
-    backgroundColor: '#ead8b1',
+    backgroundColor: "#ead8b1", // Cor de fundo
   },
   emptyContainer: {
     flex: 1, // Faz o container ocupar toda a altura disponível
@@ -114,9 +104,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  darkItemContainer: {
-    backgroundColor: "#333",
-  },
   status: {
     marginTop: 10,
     fontWeight: "bold",
@@ -127,12 +114,6 @@ const styles = StyleSheet.create({
     textAlign: "center", // Centraliza o texto horizontalmente
     fontSize: 18, // Tamanho da fonte
     color: "#555", // Cor do texto
-  },
-  darkText: {
-    color: "#FFF",
-  },
-  lightText: {
-    color: "#000",
   },
 });
 
