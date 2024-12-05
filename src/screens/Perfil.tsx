@@ -1,41 +1,42 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useUser } from "../UserContext";
+import { ThemeContext } from "../../App"; // Importa o contexto de tema
 
 const PerfilScreen = ({ navigation }: any) => {
   const { user } = useUser();
+  const { theme } = useContext(ThemeContext); // Obtém o tema atual
+  const isDarkMode = theme === "dark";
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isDarkMode ? styles.darkContainer : styles.lightContainer]}>
       {user ? (
         <>
-          {/* Exibe a imagem de perfil ou um ícone padrão */}
           <Image
             source={
               user.foto
                 ? {
-                    uri: `http:///PassaporteCulturalSite/${user.foto.replace(
+                    uri: `http://192.168.0.9/PassaporteCulturalSite/${user.foto.replace(
                       "../",
                       ""
-                    )}`, // Remove '../' do caminho
+                    )}`,
                   }
-                : require("../../assets/DefaultUserIcon.png") // Ícone padrão caso não tenha foto
+                : require("../../assets/DefaultUserIcon.png")
             }
             style={styles.profileImage}
           />
-
-          <View style={styles.info}>
-            <Text style={styles.name}>{user.name}</Text>
-            <Text style={styles.turma}>Turma: {user.turma}</Text>
-            <Text style={styles.pontos}>Pontos: {user.pontos}</Text>
+          <View style={[styles.info, isDarkMode && styles.darkInfo]}>
+            <Text style={[styles.name, isDarkMode && styles.darkText]}>{user.name}</Text>
+            <Text style={[styles.turma, isDarkMode && styles.darkText]}>Turma: {user.turma}</Text>
+            <Text style={[styles.pontos, isDarkMode && styles.darkText]}>Pontos: {user.pontos}</Text>
           </View>
         </>
       ) : (
-        <Text>Carregando...</Text>
+        <Text style={[styles.loadingText, isDarkMode && styles.darkText]}>Carregando...</Text>
       )}
 
       <TouchableOpacity
-        style={styles.EditarButton}
+        style={[styles.EditarButton, isDarkMode && styles.darkButton]}
         onPress={() => navigation.navigate("EditarPerfil")}
       >
         <Text style={styles.EditarButtonText}>Editar Perfil</Text>
@@ -57,18 +58,35 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
+  },
+  lightContainer: {
     backgroundColor: "#ead8b1",
+  },
+  darkContainer: {
+    backgroundColor: "#001529",
   },
   profileImage: {
     width: 210,
     height: 210,
-    borderRadius: 105, // Para fazer um círculo perfeito
+    borderRadius: 105,
     marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  info: {
+    width: 300,
+    height: 200,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 25,
+    marginTop: 10,
+    backgroundColor: "#001f3f",
+  },
+  darkInfo: {
+    backgroundColor: "#333",
   },
   name: {
     fontSize: 30,
@@ -77,28 +95,14 @@ const styles = StyleSheet.create({
   },
   turma: {
     fontSize: 25,
-    color: "rgb(196, 221, 230);",
+    color: "rgb(196, 221, 230)",
     marginTop: 10,
   },
   pontos: {
     fontSize: 25,
-    color: "rgb(196, 221, 230);",
+    color: "rgb(196, 221, 230)",
     marginBottom: 20,
     marginTop: 10,
-  },
-  info: {
-    backgroundColor: "#001f3f",
-    width: 300,
-    height: 200,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 25,
-    marginTop: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   EditarButton: {
     backgroundColor: "#001f3f",
@@ -106,11 +110,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 35,
     borderRadius: 10,
     marginTop: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+  },
+  darkButton: {
+    backgroundColor: "#555",
   },
   EditarButtonText: {
     color: "#FFF",
@@ -122,15 +124,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 35,
     borderRadius: 10,
     marginTop: 25,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   SairButtonText: {
     color: "#FFF",
     textAlign: "center",
+  },
+  loadingText: {
+    fontSize: 18,
+    color: "#000",
+  },
+  darkText: {
+    color: "#FFF",
   },
 });
 

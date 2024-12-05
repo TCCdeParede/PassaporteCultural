@@ -10,16 +10,7 @@
       "image": "./assets/SplashScreen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ead8b1",
-      "duration": 3000,
-      "plugins": [
-        [
-          "expo-image-picker",
-          {
-            "photosPermission": "Selecct and upload images.",
-            "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
-          }
-        ]
-      ]
+      "duration": 2500
     },
     "ios": {
       "supportsTablet": true
@@ -33,6 +24,5 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
-    
   }
 }

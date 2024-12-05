@@ -1,15 +1,19 @@
+import React, { useContext } from "react";
 import { useCameraPermissions } from "expo-camera";
 import * as Location from "expo-location";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import { FotoScreenNavigationProp } from "../type";
-import { useUser } from "../UserContext"; // Importando o contexto do usuário
+import { useUser } from "../UserContext";
+import { ThemeContext } from "../../App"; // Importa o contexto de tema
 
 export default function FotoScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const navigation = useNavigation<FotoScreenNavigationProp>();
-  const { user } = useUser(); // Obtendo o usuário logado do contexto
+  const { user } = useUser();
+  const { theme } = useContext(ThemeContext); // Obtém o tema atual
+  const isDarkMode = theme === "dark";
 
   if (!permission) {
     return <View />;
@@ -17,11 +21,15 @@ export default function FotoScreen() {
 
   if (!permission.granted) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.message}>
+      <View style={[styles.container, isDarkMode ? styles.darkContainer : styles.lightContainer]}>
+        <Text style={[styles.message, isDarkMode && styles.darkText]}>
           É necessário conceder permissão para acessar a câmera
         </Text>
-        <Button onPress={requestPermission} title="Conceder Permissão" color={'#001f3f'}/>
+        <Button
+          onPress={requestPermission}
+          title="Conceder Permissão"
+          color={isDarkMode ? "#555" : "#001f3f"}
+        />
       </View>
     );
   }
@@ -37,8 +45,7 @@ export default function FotoScreen() {
     const result = await ImagePicker.launchCameraAsync(options);
 
     if (!result.canceled) {
-      const locationPermission =
-        await Location.requestForegroundPermissionsAsync();
+      const locationPermission = await Location.requestForegroundPermissionsAsync();
 
       if (!locationPermission.granted) {
         alert("É necessário conceder permissão para acessar a localização");
@@ -50,14 +57,12 @@ export default function FotoScreen() {
       const longitude = location.coords.longitude;
 
       if (user) {
-        // Redireciona para a tela `RegistrarVisita` com os dados da foto e localização
         navigation.navigate("RegistrarVisita", {
           photoUri: result.assets[0].uri,
           location: { latitude, longitude },
-          date: new Date().toISOString(), // Formato padrão para manipulação posterior
-          rmalu: user.rm, // Incluímos o RM do aluno logado
-        });        
-        
+          date: new Date().toISOString(),
+          rmalu: user.rm,
+        });
       } else {
         alert("Usuário não autenticado. Faça login novamente.");
         navigation.navigate("Login");
@@ -66,17 +71,25 @@ export default function FotoScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Adicionar Visita</Text>
-      <View style={styles.reminderBox}>
-        <Text style={styles.subtitle}>Lembre-se de:</Text>
-        <Text style={styles.reminderText}>• Foto nítida</Text>
-        <Text style={styles.reminderText}>• Facilidade de localizar onde está</Text>
-        <Text style={styles.reminderText}>• Selfie sua</Text>
-        <Text style={styles.reminderText}>• foto dentro da exposição</Text>
-        <Text style={styles.reminderText}>• foto dentro de um item da exposição</Text>
-        <Text style={styles.reminderText}>• Selecione corretamente o local de sua visita</Text>
-        <TouchableOpacity style={styles.button} onPress={openCamera}>
+    <View style={[styles.container, isDarkMode ? styles.darkContainer : styles.lightContainer]}>
+      <Text style={[styles.title, isDarkMode && styles.darkText]}>Adicionar Visita</Text>
+      <View style={[styles.reminderBox, isDarkMode && styles.darkReminderBox]}>
+        <Text style={[styles.subtitle, isDarkMode && styles.darkText]}>Lembre-se de:</Text>
+        <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>• Foto nítida</Text>
+        <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>
+          • Facilidade de localizar onde está
+        </Text>
+        <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>• Selfie sua</Text>
+        <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>
+          • Foto dentro da exposição
+        </Text>
+        <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>
+          • Foto dentro de um item da exposição
+        </Text>
+        <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>
+          • Selecione corretamente o local de sua visita
+        </Text>
+        <TouchableOpacity style={[styles.button, isDarkMode && styles.darkButton]} onPress={openCamera}>
           <Text style={styles.buttonText}>Abrir Câmera</Text>
         </TouchableOpacity>
       </View>
@@ -90,19 +103,22 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#ead8b1"
+  },
+  lightContainer: {
+    backgroundColor: "#ead8b1",
+  },
+  darkContainer: {
+    backgroundColor: "#001529",
   },
   message: {
     textAlign: "center",
     paddingBottom: 10,
-    alignItems: "center",
   },
   title: {
     fontSize: 35,
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
-    
   },
   reminderBox: {
     backgroundColor: "rgb(196, 221, 230)",
@@ -115,6 +131,9 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  darkReminderBox: {
+    backgroundColor: "#333",
+  },
   subtitle: {
     fontSize: 18,
     fontWeight: "bold",
@@ -123,8 +142,6 @@ const styles = StyleSheet.create({
   reminderText: {
     fontSize: 16,
     marginBottom: 5,
-    color: "#111",
-    
   },
   button: {
     backgroundColor: "#001f3f",
@@ -133,8 +150,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 30,
   },
+  darkButton: {
+    backgroundColor: "#555",
+  },
   buttonText: {
     color: "#fff",
     fontSize: 18,
+  },
+  darkText: {
+    color: "#FFF",
   },
 });
