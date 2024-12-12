@@ -52,7 +52,7 @@ const PerfilScreen = ({ navigation }: any) => {
             source={
               userData.foto
                 ? {
-                    uri: `http://192.168.1.107/PassaporteCulturalSite/${userData.foto.replace(
+                    uri: `http://passaportecultural.rf.gd/${userData.foto.replace(
                       "../",
                       ""
                     )}`, // Remove '../' do caminho

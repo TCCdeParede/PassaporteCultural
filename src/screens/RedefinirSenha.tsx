@@ -22,7 +22,7 @@ export default function ForgotPasswordScreen() {
 
     try {
       const response = await fetch(
-        "http://192.168.1.107/PassaporteCulturalSite/php/redefinirSenhaAluno.php",
+        "http://passaportecultural.rf.gd/php/redefinirSenhaAluno.php",
         {
           method: "POST",
           body: data,

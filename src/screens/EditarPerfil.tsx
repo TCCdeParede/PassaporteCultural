@@ -18,7 +18,7 @@ const EditProfileScreen = ({ navigation }: any) => {
   const [name, setName] = useState(user?.name || "");
   const [profileImage, setProfileImage] = useState<string | null>(
     user?.foto
-      ? `http://192.168.1.107/PassaporteCulturalSite/${user.foto.replace(
+      ? `http://passaportecultural.rf.gd/${user.foto.replace(
           "../",
           ""
         )}`
@@ -30,7 +30,7 @@ const EditProfileScreen = ({ navigation }: any) => {
       setName(user.name);
       setProfileImage(
         user.foto
-          ? `http://192.168.1.107/PassaporteCulturalSite/${user.foto.replace(
+          ? `http://passaportecultural.rf.gd/${user.foto.replace(
               "../",
               ""
             )}`
@@ -74,7 +74,7 @@ const EditProfileScreen = ({ navigation }: any) => {
       }
 
       const response = await axios.post(
-        "http://192.168.1.107/PassaporteCulturalSite/php/updateperfil.php",
+        "http://passaportecultural.rf.gd/php/updateperfil.php",
         formData,
         {
           headers: {

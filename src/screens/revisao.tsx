@@ -15,7 +15,7 @@ const Revisao = () => {
 
     try {
       const response = await fetch(
-        `http://192.168.1.107/PassaporteCulturalSite/php/revisar_visitas.php?rmalu=${user.rm}` // Passando o rmalu como parâmetro
+        `http://passaportecultural.rf.gd/php/revisar_visitas.php?rmalu=${user.rm}` // Passando o rmalu como parâmetro
       );
       const data = await response.json();
       if (data.status === "sucesso") {
