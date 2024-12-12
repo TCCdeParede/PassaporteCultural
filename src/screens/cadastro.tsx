@@ -29,7 +29,10 @@ const CadastroAlunoScreen = () => {
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert("Permissão necessária", "Precisamos da sua permissão para acessar a galeria!");
+      Alert.alert(
+        "Permissão necessária",
+        "Precisamos da sua permissão para acessar a galeria!"
+      );
       return;
     }
 
@@ -52,7 +55,10 @@ const CadastroAlunoScreen = () => {
 
   const handleSubmit = async () => {
     if (!rmalu || !nomealu || !emailalu || !alusenha || !nometur || !imageUri) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos e selecione uma foto!");
+      Alert.alert(
+        "Erro",
+        "Por favor, preencha todos os campos e selecione uma foto!"
+      );
       return;
     }
 
@@ -75,7 +81,7 @@ const CadastroAlunoScreen = () => {
 
     try {
       const response = await axios.post(
-        "http://192.168.1.104/PassaporteCulturalSite/php/cadAluno.php",
+        "http://192.168.1.107/PassaporteCulturalSite/php/cadAluno.php",
         formData,
         {
           headers: {
@@ -217,7 +223,11 @@ const CadastroAlunoScreen = () => {
         </TouchableOpacity>
       )}
 
-      <Button title="Cadastrar" onPress={handleSubmit} color={theme === "dark" ? "#555" : "#001f3f"} />
+      <Button
+        title="Cadastrar"
+        onPress={handleSubmit}
+        color={theme === "dark" ? "#555" : "#001f3f"}
+      />
     </View>
   );
 };
@@ -269,14 +279,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   imagePicker: {
-    width: 120,  
-    height: 120, 
-    borderRadius: 60, 
-    justifyContent: "center", 
-    alignItems: "center", 
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 1,
     alignSelf: "center",
-    marginVertical: 10, 
+    marginVertical: 10,
   },
   lightImagePicker: {
     backgroundColor: "rgb(196, 221, 230)",
@@ -288,8 +298,8 @@ const styles = StyleSheet.create({
   },
   imagePickerText: {
     fontWeight: "bold",
-    textAlign: "center",  
-    fontSize: 14, 
+    textAlign: "center",
+    fontSize: 14,
   },
   imagePreview: {
     width: 100,
@@ -297,7 +307,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     borderRadius: 50,
     alignSelf: "center",
-    marginBottom:20,
+    marginBottom: 20,
   },
 });
 

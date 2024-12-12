@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -9,13 +9,15 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useUser } from "../UserContext"; // Importe o contexto
+import { useUser } from "../UserContext";
+import { ThemeContext } from "../../App";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-  const { setUser } = useUser(); // Acesse o contexto para salvar os dados do usuário
+  const { setUser } = useUser();
+  const { theme } = useContext(ThemeContext);
 
   async function handleLogin() {
     const data = new FormData();
@@ -24,7 +26,7 @@ export default function LoginScreen() {
 
     try {
       const response = await fetch(
-        "http://192.168.1.104/PassaporteCulturalSite/php/loginAluno.php",
+        "http://192.168.1.107/PassaporteCulturalSite/php/loginAluno.php",
         {
           method: "POST",
           body: data,
@@ -57,34 +59,66 @@ export default function LoginScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+    <View
+      style={[
+        styles.container,
+        theme === "dark" ? styles.darkContainer : styles.lightContainer,
+      ]}
+    >
+      <Text
+        style={[
+          styles.title,
+          theme === "dark" ? styles.darkText : styles.lightText,
+        ]}
+      >
+        Login
+      </Text>
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          theme === "dark" ? styles.darkInput : styles.lightInput,
+        ]}
         placeholder="Email"
+        placeholderTextColor={theme === "dark" ? "#ccc" : "#333"}
         value={email}
         onChangeText={setEmail}
       />
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          theme === "dark" ? styles.darkInput : styles.lightInput,
+        ]}
         placeholder="Senha"
+        placeholderTextColor={theme === "dark" ? "#ccc" : "#333"}
         secureTextEntry
         value={password}
         onChangeText={setPassword}
       />
-      <TouchableOpacity
-        style={styles.CadText}
-        onPress={() => navigation.navigate("Cadastro")}
-      >
-        <Text>Primeira vez? Clique aqui para se cadastrar</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Cadastro")}>
+        <Text
+          style={[
+            styles.CadText,
+            theme === "dark" ? styles.darkLink : styles.lightLink,
+          ]}
+        >
+          Primeira vez? Clique aqui para se cadastrar
+        </Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.CadText}
-        onPress={() => navigation.navigate("RedefinirSenha")}
-      >
-        <Text>Esqueceu sua senha? Clique aqui</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("RedefinirSenha")}>
+        <Text
+          style={[
+            styles.CadText,
+            theme === "dark" ? styles.darkLink : styles.lightLink,
+          ]}
+        >
+          Esqueceu sua senha? Clique aqui
+        </Text>
       </TouchableOpacity>
-      <Button title="Entrar" onPress={handleLogin} color={"#001f3f"} />
+      <Button
+        title="Entrar"
+        onPress={handleLogin}
+        color={theme === "dark" ? "#555" : "#001f3f"}
+      />
     </View>
   );
 }
@@ -94,7 +128,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
+  },
+  lightContainer: {
     backgroundColor: "#ead8b1",
+  },
+  darkContainer: {
+    backgroundColor: "#001529",
   },
   title: {
     fontSize: 30,
@@ -102,23 +141,37 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
+  lightText: {
+    color: "#000",
+  },
+  darkText: {
+    color: "#fff",
+  },
   input: {
     height: 50,
-    borderColor: "#000",
     borderWidth: 1,
-    marginBottom: 15,
+    marginTop: 15,
     paddingLeft: 10,
     borderRadius: 5,
+  },
+  lightInput: {
     backgroundColor: "rgb(196, 221, 230)",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    borderColor: "#000",
+    color: "#000",
+  },
+  darkInput: {
+    backgroundColor: "#333",
+    borderColor: "#444",
+    color: "#fff",
   },
   CadText: {
-    justifyContent: "center",
-    marginLeft: 25,
-    marginBottom: 20,
+    marginVertical: 10,
+    textAlign: "center",
+  },
+  lightLink: {
+    color: "#000",
+  },
+  darkLink: {
+    color: "#80D8FF",
   },
 });

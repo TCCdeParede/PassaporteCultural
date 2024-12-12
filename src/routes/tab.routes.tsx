@@ -11,6 +11,7 @@ import LoginScreen from "../screens/login";
 import CadastroAlunoScreen from "../screens/cadastro";
 import Revisao from "../screens/revisao";
 import RedefinirSenha from "../screens/RedefinirSenha";
+import { UserProvider } from "../UserContext"; // Corrigido o caminho do contexto
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -21,7 +22,7 @@ function TabRoutes() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#ffff",
+        tabBarActiveTintColor: "#fff",
         tabBarInactiveTintColor: "#3a6d8c",
         tabBarStyle: {
           position: "absolute",
@@ -29,8 +30,6 @@ function TabRoutes() {
           backgroundColor: "#001f3f",
           shadowRadius: 10,
           elevation: 5,
-          alignItems: "center",
-          alignContent: "center",
         },
         tabBarLabelStyle: {
           fontSize: 14,
@@ -84,51 +83,58 @@ function TabRoutes() {
 // Navegação geral (Stack)
 export default function AppRoutes() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen} // Tela de login será a primeira
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Cadastro"
-        component={CadastroAlunoScreen} // Tela de cadastro
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="TabRoutes"
-        component={TabRoutes} // Tela principal de abas
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="RedefinirSenha"
-        component={RedefinirSenha} // Tela de redefinir senha
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="EditarPerfil"
-        component={EditarPerfil}
-        options={{
-          title: "Editar Perfil",
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: "#001f3f",
-          },
-          headerTintColor: "#FFF",
-        }}
-      />
-      <Stack.Screen
-        name="RegistrarVisita"
-        component={Registrar}
-        options={{
-          title: "Registrar Visita",
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: "#001f3f",
-          },
-          headerTintColor: "#FFF",
-        }}
-      />
-    </Stack.Navigator>
+    <UserProvider>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Cadastro"
+          component={CadastroAlunoScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TabRoutes"
+          component={TabRoutes}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="EditarPerfil"
+          component={EditarPerfil}
+          options={{
+            title: "Editar Perfil",
+            headerStyle: {
+              backgroundColor: "#001f3f",
+            },
+            headerTintColor: "#FFF",
+          }}
+        />
+        <Stack.Screen
+          name="RegistrarVisita"
+          component={Registrar}
+          options={{
+            title: "Registrar Visita",
+            headerStyle: {
+              backgroundColor: "#001f3f",
+            },
+            headerTintColor: "#FFF",
+          }}
+        />
+        {/* Adicionando a tela RedefinirSenha */}
+        <Stack.Screen
+          name="RedefinirSenha"
+          component={RedefinirSenha}
+          options={{
+            title: "Redefinir Senha",
+            headerStyle: {
+              backgroundColor: "#001f3f",
+            },
+            headerTintColor: "#FFF",
+          }}
+        />
+      </Stack.Navigator>
+    </UserProvider>
   );
 }

@@ -59,17 +59,6 @@ const ConfigScreen: React.FC = () => {
         </TouchableOpacity>
       ))}
 
-      <TouchableOpacity onPress={() => Linking.openURL('https://seusite.com/termos')}>
-        <Text
-          style={[
-            styles.linkText,
-            selectedTheme === 'dark' ? styles.darkLink : styles.lightLink,
-          ]}
-        >
-          Ler os Termos de Uso
-        </Text>
-      </TouchableOpacity>
-
       <Text
         style={[
           styles.versionText,
@@ -81,7 +70,6 @@ const ConfigScreen: React.FC = () => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {

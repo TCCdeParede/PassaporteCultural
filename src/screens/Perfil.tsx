@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,35 +8,43 @@ import {
   ScrollView,
 } from "react-native";
 import { useUser } from "../UserContext";
+import { ThemeContext } from "../../App";
 import { useFocusEffect } from "@react-navigation/native";
 
 const PerfilScreen = ({ navigation }: any) => {
   const { user } = useUser(); // Obtendo o usuário logado
+  const { theme } = useContext(ThemeContext); // Obtém o tema atual
+  const isDarkMode = theme === "dark";
 
   // Estado local para armazenar dados do usuário
   const [userData, setUserData] = useState<any>(null);
 
   // Função para carregar os dados do usuário
-  const loadUserData = () => {
+  const loadUserData = useCallback(() => {
     if (user) {
-      setUserData(user); // Carrega os dados do usuário
+      setUserData(user); // Atualiza os dados do estado com o contexto atual do usuário
     }
-  };
+  }, [user]);
 
-  // Atualiza os dados sempre que a tela ganhar foco
+  // Atualiza os dados do usuário sempre que a tela entra em foco
   useFocusEffect(
-    React.useCallback(() => {
-      loadUserData(); // Carrega os dados sempre que a tela ganhar foco
-    }, [user]) // Recarrega os dados sempre que o usuário mudar
+    useCallback(() => {
+      loadUserData();
+    }, [loadUserData])
   );
 
-  // Atualiza os dados ao montar o componente
+  // Atualiza os dados do usuário quando o contexto muda, mesmo em segundo plano
   useEffect(() => {
-    loadUserData(); // Carrega os dados do usuário na montagem do componente
-  }, [user]); // Isso garante que o componente será atualizado quando o usuário mudar
+    loadUserData();
+  }, [user, loadUserData]);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        isDarkMode ? styles.darkContainer : styles.lightContainer,
+      ]}
+    >
       {userData ? (
         <>
           {/* Exibe a imagem de perfil ou um ícone padrão */}
@@ -44,7 +52,7 @@ const PerfilScreen = ({ navigation }: any) => {
             source={
               userData.foto
                 ? {
-                    uri: `http://192.168.1.104/PassaporteCulturalSite/${userData.foto.replace(
+                    uri: `http://192.168.1.107/PassaporteCulturalSite/${userData.foto.replace(
                       "../",
                       ""
                     )}`, // Remove '../' do caminho
@@ -54,29 +62,35 @@ const PerfilScreen = ({ navigation }: any) => {
             style={styles.profileImage}
           />
 
-          <View style={styles.info}>
-            <Text style={styles.name}>{userData.name}</Text>
-            <Text style={styles.turma}>Turma: {userData.turma}</Text>
-            <Text style={styles.pontos}>
+          <View style={[styles.info, isDarkMode && styles.darkInfo]}>
+            <Text style={[styles.name, isDarkMode && styles.darkText]}>
+              {userData.name}
+            </Text>
+            <Text style={[styles.turma, isDarkMode && styles.darkText]}>
+              Turma: {userData.turma}
+            </Text>
+            <Text style={[styles.pontos, isDarkMode && styles.darkText]}>
               Pontos Mensais Gerais: {userData.pontMesGeral}
             </Text>
-            <Text style={styles.pontos}>
+            <Text style={[styles.pontos, isDarkMode && styles.darkText]}>
               Pontos Anuais Gerais: {userData.pontAnoGeral}
             </Text>
-            <Text style={styles.pontos}>
+            <Text style={[styles.pontos, isDarkMode && styles.darkText]}>
               Pontos Mensais Computados: {userData.pontMesComputado}
             </Text>
-            <Text style={styles.pontos}>
+            <Text style={[styles.pontos, isDarkMode && styles.darkText]}>
               Pontos Anuais Computados: {userData.pontAnoComputado}
             </Text>
           </View>
         </>
       ) : (
-        <Text>Carregando...</Text>
+        <Text style={[styles.loadingText, isDarkMode && styles.darkText]}>
+          Carregando...
+        </Text>
       )}
 
       <TouchableOpacity
-        style={styles.EditarButton}
+        style={[styles.EditarButton, isDarkMode && styles.darkButton]}
         onPress={() => navigation.navigate("EditarPerfil")}
       >
         <Text style={styles.EditarButtonText}>Editar Perfil</Text>
@@ -97,7 +111,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     backgroundColor: "#ead8b1",
-    // Removido o flexGrow: 1, pois o ScrollView já lida com a rolagem
+  },
+  lightContainer: {
+    backgroundColor: "#ead8b1",
+  },
+  darkContainer: {
+    backgroundColor: "#001529",
   },
   profileImage: {
     width: 210,
@@ -110,6 +129,18 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  info: {
+    width: 350,
+    height: 350,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 25,
+    marginTop: 10,
+    backgroundColor: "#001f3f",
+  },
+  darkInfo: {
+    backgroundColor: "#333",
+  },
   name: {
     fontSize: 30,
     fontWeight: "bold",
@@ -118,30 +149,19 @@ const styles = StyleSheet.create({
   },
   turma: {
     fontSize: 25,
-    color: "rgb(196, 221, 230);",
+    color: "rgb(196, 221, 230)",
     marginTop: 10,
     textAlign: "center",
   },
   pontos: {
     fontSize: 20,
-    color: "rgb(196, 221, 230);",
+    color: "rgb(196, 221, 230)",
     marginBottom: 10,
     marginTop: 5,
     textAlign: "center",
   },
-  info: {
-    backgroundColor: "#001f3f",
-    width: 300,
-    padding: 20, // Adicionando padding para o conteúdo
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 25,
-    marginTop: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+  darkButton: {
+    backgroundColor: "#555",
   },
   EditarButton: {
     backgroundColor: "#001f3f",
@@ -149,11 +169,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 35,
     borderRadius: 10,
     marginTop: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   EditarButtonText: {
     color: "#FFF",
@@ -174,6 +189,13 @@ const styles = StyleSheet.create({
   SairButtonText: {
     color: "#FFF",
     textAlign: "center",
+  },
+  loadingText: {
+    fontSize: 18,
+    color: "#000",
+  },
+  darkText: {
+    color: "#FFF",
   },
 });
 

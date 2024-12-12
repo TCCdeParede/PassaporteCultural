@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 import { StatusBar } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Routes from "./src/routes";
-import { UserProvider } from "./src/UserContext"; // Importe o UserProvider
+import { UserProvider } from "./src/UserContext";
 
 export const ThemeContext = createContext<{
   theme: string;
@@ -33,8 +33,6 @@ const App: React.FC = () => {
 
   return (
     <UserProvider>
-      {" "}
-      {/* Envolva o conteúdo com UserProvider */}
       <ThemeContext.Provider value={{ theme, setTheme }}>
         {/* Ajusta a barra de status dependendo do tema atual */}
         <StatusBar

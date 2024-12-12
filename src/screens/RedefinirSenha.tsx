@@ -1,5 +1,5 @@
 // ForgotPasswordScreen.tsx
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -9,10 +9,12 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { ThemeContext } from "../../App";
 
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState("");
   const navigation = useNavigation();
+  const { theme } = useContext(ThemeContext);
 
   async function handlePasswordReset() {
     const data = new FormData();
@@ -20,7 +22,7 @@ export default function ForgotPasswordScreen() {
 
     try {
       const response = await fetch(
-        "http://192.168.1.104/PassaporteCulturalSite/php/redefinirSenhaAluno.php",
+        "http://192.168.1.107/PassaporteCulturalSite/php/redefinirSenhaAluno.php",
         {
           method: "POST",
           body: data,
@@ -42,16 +44,36 @@ export default function ForgotPasswordScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Recuperar Senha</Text>
+    <View
+      style={[
+        styles.container,
+        theme === "dark" ? styles.darkContainer : styles.lightContainer,
+      ]}
+    >
+      <Text
+        style={[
+          styles.title,
+          theme === "dark" ? styles.darkText : styles.lightText,
+        ]}
+      >
+        Recuperar Senha
+      </Text>
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          theme === "dark" ? styles.darkInput : styles.lightInput,
+        ]}
         placeholder="Digite seu email"
+        placeholderTextColor={theme === "dark" ? "#ccc" : "#333"}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
       />
-      <Button title="Enviar" onPress={handlePasswordReset} color={"#001f3f"} />
+      <Button
+        title="Enviar"
+        onPress={handlePasswordReset}
+        color={theme === "dark" ? "#555" : "#001f3f"}
+      />
     </View>
   );
 }
@@ -61,7 +83,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
+  },
+  lightContainer: {
     backgroundColor: "#ead8b1",
+  },
+  darkContainer: {
+    backgroundColor: "#001529",
   },
   title: {
     fontSize: 30,
@@ -69,18 +96,27 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
+  lightText: {
+    color: "#000",
+  },
+  darkText: {
+    color: "#fff",
+  },
   input: {
     height: 50,
-    borderColor: "#000",
     borderWidth: 1,
     marginBottom: 15,
     paddingLeft: 10,
     borderRadius: 5,
+  },
+  lightInput: {
     backgroundColor: "rgb(196, 221, 230)",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    borderColor: "#000",
+    color: "#000",
+  },
+  darkInput: {
+    backgroundColor: "#333",
+    borderColor: "#444",
+    color: "#fff",
   },
 });

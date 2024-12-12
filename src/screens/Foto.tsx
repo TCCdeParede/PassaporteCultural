@@ -21,7 +21,12 @@ export default function FotoScreen() {
 
   if (!permission.granted) {
     return (
-      <View style={[styles.container, isDarkMode ? styles.darkContainer : styles.lightContainer]}>
+      <View
+        style={[
+          styles.container,
+          isDarkMode ? styles.darkContainer : styles.lightContainer,
+        ]}
+      >
         <Text style={[styles.message, isDarkMode && styles.darkText]}>
           É necessário conceder permissão para acessar a câmera
         </Text>
@@ -45,7 +50,8 @@ export default function FotoScreen() {
     const result = await ImagePicker.launchCameraAsync(options);
 
     if (!result.canceled) {
-      const locationPermission = await Location.requestForegroundPermissionsAsync();
+      const locationPermission =
+        await Location.requestForegroundPermissionsAsync();
 
       if (!locationPermission.granted) {
         alert("É necessário conceder permissão para acessar a localização");
@@ -71,15 +77,28 @@ export default function FotoScreen() {
   };
 
   return (
-    <View style={[styles.container, isDarkMode ? styles.darkContainer : styles.lightContainer]}>
-      <Text style={[styles.title, isDarkMode && styles.darkText]}>Adicionar Visita</Text>
+    <View
+      style={[
+        styles.container,
+        isDarkMode ? styles.darkContainer : styles.lightContainer,
+      ]}
+    >
+      <Text style={[styles.title, isDarkMode && styles.darkText]}>
+        Adicionar Visita
+      </Text>
       <View style={[styles.reminderBox, isDarkMode && styles.darkReminderBox]}>
-        <Text style={[styles.subtitle, isDarkMode && styles.darkText]}>Lembre-se de:</Text>
-        <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>• Foto nítida</Text>
+        <Text style={[styles.subtitle, isDarkMode && styles.darkText]}>
+          Lembre-se de:
+        </Text>
+        <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>
+          • Foto nítida
+        </Text>
         <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>
           • Facilidade de localizar onde está
         </Text>
-        <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>• Selfie sua</Text>
+        <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>
+          • Selfie sua
+        </Text>
         <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>
           • Foto dentro da exposição
         </Text>
@@ -89,7 +108,10 @@ export default function FotoScreen() {
         <Text style={[styles.reminderText, isDarkMode && styles.darkText]}>
           • Selecione corretamente o local de sua visita
         </Text>
-        <TouchableOpacity style={[styles.button, isDarkMode && styles.darkButton]} onPress={openCamera}>
+        <TouchableOpacity
+          style={[styles.button, isDarkMode && styles.darkButton]}
+          onPress={openCamera}
+        >
           <Text style={styles.buttonText}>Abrir Câmera</Text>
         </TouchableOpacity>
       </View>

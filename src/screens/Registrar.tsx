@@ -80,14 +80,9 @@ export default function RegistrarVisitaScreen({
       rmprof: null,
     };
 
-    console.log(
-      "Dados enviados para o backend:",
-      JSON.stringify(data, null, 2)
-    );
-
     try {
       const response = await fetch(
-        "http://192.168.1.104/PassaporteCulturalSite/php/visita.php",
+        "http://192.168.1.107/PassaporteCulturalSite/php/visita.php",
         {
           method: "POST",
           headers: {
@@ -124,7 +119,10 @@ export default function RegistrarVisitaScreen({
   // Função para adicionar mais fotos
   const addPhoto = async () => {
     if (photos.length >= 5) {
-      Alert.alert("Limite máximo atingido", "Você só pode adicionar até 5 fotos");
+      Alert.alert(
+        "Limite máximo atingido",
+        "Você só pode adicionar até 5 fotos"
+      );
       return;
     }
 
@@ -152,32 +150,80 @@ export default function RegistrarVisitaScreen({
   };
 
   return (
-    <ScrollView contentContainerStyle={[styles.container, theme === "dark" ? styles.darkContainer : styles.lightContainer]}>
-      <Text style={[styles.title, theme === "dark" ? styles.darkText : styles.lightText]}>Fotos</Text>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        theme === "dark" ? styles.darkContainer : styles.lightContainer,
+      ]}
+    >
+      <Text
+        style={[
+          styles.title,
+          theme === "dark" ? styles.darkText : styles.lightText,
+        ]}
+      >
+        Fotos
+      </Text>
       {photos.map((photo, index) => (
         <View key={index} style={styles.photoContainer}>
           <Image source={{ uri: photo.uri }} style={styles.image} />
-          {photo.date && <Text style={[styles.dateText, theme === "dark" ? styles.darkText : styles.lightText]}>Data: {photo.date}</Text>}
+          {photo.date && (
+            <Text
+              style={[
+                styles.dateText,
+                theme === "dark" ? styles.darkText : styles.lightText,
+              ]}
+            >
+              Data: {photo.date}
+            </Text>
+          )}
           {/* Exibe o botão de excluir apenas para fotos após a primeira */}
           {index > 0 && (
             <TouchableOpacity
-              style={[styles.removeButton, theme === "dark" && styles.darkButton]}
+              style={[
+                styles.removeButton,
+                theme === "dark" && styles.darkButton,
+              ]}
               onPress={() => removePhoto(photo.uri)}
             >
-              <Text style={[styles.removeButtonText, theme === "dark" && styles.darkText]}>Excluir</Text>
+              <Text
+                style={[
+                  styles.removeButtonText,
+                  theme === "dark" && styles.darkText,
+                ]}
+              >
+                Excluir
+              </Text>
             </TouchableOpacity>
           )}
         </View>
       ))}
 
       <TouchableOpacity
-        style={[styles.addButton, theme === "dark" ? styles.darkButton : styles.lightButton]}
+        style={[
+          styles.addButton,
+          theme === "dark" ? styles.darkButton : styles.lightButton,
+        ]}
         onPress={addPhoto}
       >
         <Text style={styles.addButtonText}>Adicionar Foto</Text>
       </TouchableOpacity>
-      <Text style={[styles.title, theme === "dark" ? styles.darkText : styles.lightText]}>A que local sua visita está atribuída?</Text>
-      <View style={[styles.radioContainer, theme === "dark" ? styles.darkRadioContainer : styles.lightRadioContainer]}>
+      <Text
+        style={[
+          styles.title,
+          theme === "dark" ? styles.darkText : styles.lightText,
+        ]}
+      >
+        A que local sua visita está atribuída?
+      </Text>
+      <View
+        style={[
+          styles.radioContainer,
+          theme === "dark"
+            ? styles.darkRadioContainer
+            : styles.lightRadioContainer,
+        ]}
+      >
         {[
           "Show",
           "Teatro",
@@ -198,7 +244,14 @@ export default function RegistrarVisitaScreen({
               uncheckedColor={theme === "dark" ? "#aaa" : "#555"} // Cor do ícone no estado não selecionado
               onPress={() => setSelectedOption(option)}
             />
-            <Text style={[theme === "dark" ? styles.darkText : styles.lightText, selectedOption !== option ? { color: theme === "dark" ? "#aaa" : "#555" } : {}]}>
+            <Text
+              style={[
+                theme === "dark" ? styles.darkText : styles.lightText,
+                selectedOption !== option
+                  ? { color: theme === "dark" ? "#aaa" : "#555" }
+                  : {},
+              ]}
+            >
               {option}
             </Text>
           </View>
